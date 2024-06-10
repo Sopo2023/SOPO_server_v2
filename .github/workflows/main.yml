@@ -15,6 +15,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: make application.yml
+        run: |
+          cd ./src/main/resources
+          touch ./application.yml
+          echo "${{ secrets.APPLICATION }}" > ./application.yml
+
       - name: set chmod
         run: chmod +x ./gradlew
 
