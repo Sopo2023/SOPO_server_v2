@@ -56,4 +56,4 @@ jobs:
             docker rm sopo_v2
             docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo_v2
             docker pull ${{ secrets.DOCKER_USERNAME }}/sopo_v2
-            docker run -d -p 8080:8080 --name welspy ${{ secrets.DOCKER_USERNAME }}/sopo_v2
+            docker run -d -p 8080:8080 --name sopo_v2 ${{ secrets.DOCKER_USERNAME }}/sopo_v2
