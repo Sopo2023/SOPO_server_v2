@@ -10,10 +10,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import kr.hs.dgsw.SOPO_server_v2.domain.board.dto.BoardUpdateReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.entity.FileEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ import java.util.List;
 @Entity
 @Table(name = "tbl_board")
 @NoArgsConstructor
+@SuperBuilder
 public class BoardEntity {
 
     // 게시물 아이디
@@ -39,7 +42,7 @@ public class BoardEntity {
 
     // 게시물 좋아요
     @Column(name = "board_like_count")
-    private Integer boardLikeCount;
+    private Integer boardLikeCount = 0;
 
     // 유저 아이디
     @ManyToOne
@@ -49,5 +52,10 @@ public class BoardEntity {
     // 게시물 파일
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true) // 읽기만, 게시물 삭제될 때 함께 삭제
     private List<FileEntity> file;
+
+    public void update(BoardUpdateReq updateReq) {
+        this.boardTitle = updateReq.boardTitle();
+        this.boardContent = updateReq.boardContent();
+    }
 
 }
