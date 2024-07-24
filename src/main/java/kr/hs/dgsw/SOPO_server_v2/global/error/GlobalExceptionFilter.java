@@ -1,11 +1,11 @@
 package kr.hs.dgsw.SOPO_server_v2.global.error;
 
-import com.b1nd.alimoserver.global.error.exception.BusinessException;
-import com.b1nd.alimoserver.global.error.exception.StatusEnum;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.hs.dgsw.SOPO_server_v2.global.error.exception.BusinessException;
+import kr.hs.dgsw.SOPO_server_v2.global.error.exception.StatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
