@@ -1,9 +1,8 @@
-package com.b1nd.alimoserver.global.error.exception;
+package kr.hs.dgsw.SOPO_server_v2.global.error.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor

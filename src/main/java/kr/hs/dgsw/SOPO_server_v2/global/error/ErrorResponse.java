@@ -1,6 +1,7 @@
-package com.b1nd.alimoserver.global.error;
+package kr.hs.dgsw.SOPO_server_v2.global.error;
 
 import com.b1nd.alimoserver.global.error.exception.StatusEnum;
+import kr.hs.dgsw.SOPO_server_v2.global.error.exception.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

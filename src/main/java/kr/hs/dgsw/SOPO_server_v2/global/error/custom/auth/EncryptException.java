@@ -1,4 +1,4 @@
-package com.b1nd.alimoserver.global.error.custom.auth;
+package kr.hs.dgsw.SOPO_server_v2.global.error.custom.auth;
 
 import com.b1nd.alimoserver.global.error.exception.BusinessException;
 import com.b1nd.alimoserver.global.error.exception.StatusEnum;
