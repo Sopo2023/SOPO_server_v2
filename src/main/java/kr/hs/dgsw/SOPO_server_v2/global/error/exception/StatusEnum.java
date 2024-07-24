@@ -16,6 +16,7 @@ public enum StatusEnum {
     MALFORMED_JWT(400, "Jwt is malformed"),
     UNSUPPORTED_JWT(400, "Jwt is unsupported"),
     ILLEGAL_ARGUMENT(400, "IllegalArgumentException occurred"),
+    WRONG_TOKEN_TYPE(400, "Wrong token type"),
 
     // general
     OK(200, "OK"),
@@ -38,15 +39,6 @@ public enum StatusEnum {
 
     //email
     UNABLE_TO_SEND_EMAIL(403, "Unable to send email"),
-
-    CHILD_CODE_OVER_USE_TWO(400, "CHILD_CODE_OVER_USE_TWO"),
-    CHILD_CODE_NOT_FOUND(404, "Child code not found"),
-
-    CATEGORY_NOT_FOUND(404, "Category not found"),
-
-    //notification
-    NOTIFICATION_NOT_FOUND(404, "Notification not found"),
-    COMMENT_NOT_FOUND(404, "Comment not found"),
 
     //fcm
     MESSAGE_SEND_FAILED(403, "Message send failed"),
