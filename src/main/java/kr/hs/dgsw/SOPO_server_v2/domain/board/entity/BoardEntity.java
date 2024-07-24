@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import kr.hs.dgsw.SOPO_server_v2.domain.board.dto.BoardUpdateReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.entity.FileEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
+import kr.hs.dgsw.SOPO_server_v2.global.common.entity.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -24,7 +25,7 @@ import java.util.List;
 @Table(name = "tbl_board")
 @NoArgsConstructor
 @SuperBuilder
-public class BoardEntity {
+public class BoardEntity extends BaseTimeEntity {
 
     // 게시물 아이디
     @Id
@@ -58,4 +59,7 @@ public class BoardEntity {
         this.boardContent = updateReq.boardContent();
     }
 
+    public void likeUpdate(int boardLikeCount) {
+        this.boardLikeCount += boardLikeCount;
+    }
 }

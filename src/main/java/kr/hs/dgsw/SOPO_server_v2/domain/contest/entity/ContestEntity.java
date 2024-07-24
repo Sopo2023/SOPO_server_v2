@@ -14,6 +14,7 @@ import kr.hs.dgsw.SOPO_server_v2.domain.contest.dto.ContestUpdateReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.contest.enums.ContestState;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.entity.FileEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
+import kr.hs.dgsw.SOPO_server_v2.global.common.entity.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -28,7 +29,7 @@ import java.util.List;
 @Table(name = "tbl_contest")
 @NoArgsConstructor
 @SuperBuilder
-public class ContestEntity {
+public class ContestEntity extends BaseTimeEntity {
 
     // 대회 아이디
     @Id
@@ -80,4 +81,9 @@ public class ContestEntity {
         this.contestPerson = updateReq.contestPerson();
         this.contestDateTime = updateReq.contestDateTime();
     }
+
+    public void likeUpdate(int contestLikeCount) {
+        this.contestLikeCount += contestLikeCount;
+    }
+
 }
