@@ -7,8 +7,10 @@ import kr.hs.dgsw.SOPO_server_v2.domain.file.dto.FileRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.entity.FileEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.enums.FileCategory;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.repository.FileRepository;
+import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +31,7 @@ public class FileService {
     private final FileRepository fileRepository;
 
     @Transactional
-    public List<FileRes> fileUpload(FileCategory fileCategory, List<MultipartFile> fileList) {
+    public ResponseData<List<FileRes>> fileUpload(FileCategory fileCategory, List<MultipartFile> fileList) {
         List<FileRes> fileLists = new ArrayList<>();
         try {
             for (MultipartFile file : fileList) {
@@ -50,6 +52,7 @@ public class FileService {
                         .fileUrl(amazonS3.getUrl(bucket, fileName).toString())
                         .build();
 
+
                 fileLists.add(oneFile);
 
                 // DB에 저장하는 코드
@@ -63,6 +66,6 @@ public class FileService {
         } catch (IOException e) {
             throw new RuntimeException("Error uploading file to S3", e);
         }
-        return fileLists;
+        return ResponseData.of(HttpStatus.OK, "파일 업로드 완료", fileLists);
     }
 }
