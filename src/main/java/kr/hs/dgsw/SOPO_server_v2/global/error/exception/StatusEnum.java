@@ -47,7 +47,13 @@ public enum StatusEnum {
     //fcm
     MESSAGE_SEND_FAILED(403,"Message send failed"),
     TOKEN_NOT_PROVIDED(400, "잘못된 토큰"),
-    CLOUD_EXCEPTION(500,"클라우드 에러")
+    CLOUD_EXCEPTION(500,"클라우드 에러"),
+
+    // board
+    BOARD_NOT_FOUND(404, "Board not found"),
+
+    // contest
+    CONTEST_NOT_FOUND(404, "Contest not found")
     ;
 
     private final int statusCode;
