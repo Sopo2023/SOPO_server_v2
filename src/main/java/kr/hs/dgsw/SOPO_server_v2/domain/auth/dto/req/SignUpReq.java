@@ -6,7 +6,7 @@ public record SignUpReq(
         String memberEmail,
         String authCode,
         String memberPassword,
-        String School,
+        String memberSchool,
         String memberFcmToken
 ) {
 }

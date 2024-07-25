@@ -8,6 +8,7 @@ import kr.hs.dgsw.SOPO_server_v2.domain.member.repository.MemberRepository;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.email.CodeIsWrongException;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.email.EmailAlreadyExistsException;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
+import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,7 +38,7 @@ public class AuthService {
                 .memberName(signUpReq.memberName())
                 .memberEmail(signUpReq.memberEmail())
                 .memberPassword(new BCryptPasswordEncoder().encode(signUpReq.memberPassword()))
-                .memberSchool(signUpReq.School())
+                .memberSchool(signUpReq.memberSchool())
                 .memberCategory(MemberCategory.USER)
                 .memberState(MemberState.ACTIVE)
                 .memberFcmToken(signUpReq.memberFcmToken())
@@ -46,4 +47,8 @@ public class AuthService {
                 .build());
         return Response.of(HttpStatus.OK, "회원가입 성공");
     }
+
+//    public ResponseData
+//
+
 }

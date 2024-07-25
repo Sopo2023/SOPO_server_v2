@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
     private final AuthEmailService authEmailService;
 
-    @PostMapping("/email")
+    @PostMapping("")
     public Response requestVerificationCode(
             @RequestParam(value = "email", required = true) @Validated String email
     ) {

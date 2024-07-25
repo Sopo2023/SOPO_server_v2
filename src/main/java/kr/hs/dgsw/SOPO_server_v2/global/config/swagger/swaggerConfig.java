@@ -29,6 +29,6 @@ public class swaggerConfig {
         return new Info()
                 .title("SOPO_v2")
                 .description("Java API")
-                .version("0.0.1");
+                .version("0.0.2");
     }
 }
