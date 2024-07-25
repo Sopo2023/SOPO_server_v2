@@ -39,7 +39,7 @@ public class AuthEmailService {
 
     public Response sendMail(String email) {
             URLDecoder.decode(email, StandardCharsets.UTF_8);
-                checkEmailDuplicate(email);
+            checkEmailDuplicate(email);
 
             String authCode = RandomCode.generate();
             mailService.verificationCode(
@@ -54,8 +54,7 @@ public class AuthEmailService {
     }
 
     public boolean verifiedCode(String email, String code){
-        checkEmailDuplicate(email);
-        String email1 = URLDecoder.decode(email, StandardCharsets.UTF_8);
+        email = URLDecoder.decode(email, StandardCharsets.UTF_8);
         String authCode = redisTemplate.opsForValue().get(AUTH_CODE_PREFIX + email);
         return StringUtils.hasText(authCode) && authCode.equals(code);
     }

@@ -43,6 +43,7 @@ public enum StatusEnum {
     //email
     UNABLE_TO_SEND_EMAIL(403, "Unable to send email"),
     EMAIL_ALREADY_EXIST(404, "이메일이 이미 존재합니다"),
+    CODE_IS_WRONG(404, "인증코드가 옳지 않습니다."),
 
     //fcm
     MESSAGE_SEND_FAILED(403, "Message send failed"),
