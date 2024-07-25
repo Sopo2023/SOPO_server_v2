@@ -33,15 +33,6 @@ jobs:
           docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/sopo_v2 . 
           docker push ${{ secrets.DOCKER_USERNAME }}/sopo_v2
 
-      # - name: Install Docker
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-      #     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-      #     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-      #     sudo apt-get update
-      #     sudo apt-get install docker-ce
-
       - name: Deploy to prod
         uses: appleboy/ssh-action@master
         id: deploy-prod
