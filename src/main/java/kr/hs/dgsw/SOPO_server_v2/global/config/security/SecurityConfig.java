@@ -4,14 +4,22 @@ import kr.hs.dgsw.SOPO_server_v2.global.error.ErrorResponse;
 import kr.hs.dgsw.SOPO_server_v2.global.error.exception.StatusEnum;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.jwt.JwtExceptionFilter;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.jwt.JwtFilter;
+import kr.hs.dgsw.SOPO_server_v2.global.infra.security.CustomMemberDetails;
+import kr.hs.dgsw.SOPO_server_v2.global.infra.security.MemberDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -24,26 +32,25 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final MemberDetailsService memberDetailsService;
     private final JwtFilter jwtFilter;
     private final JwtExceptionFilter jwtExceptionFilter;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .httpBasic().disable()
                 .cors()
                 .and()
                 .csrf().disable()
-                .cors(cors->cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement()
-
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
                 .and()
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFilter, JwtFilter.class)
-
                 .authorizeHttpRequests()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
@@ -63,7 +70,6 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
@@ -73,5 +79,18 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(memberDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+        return authenticationProvider;
     }
 }

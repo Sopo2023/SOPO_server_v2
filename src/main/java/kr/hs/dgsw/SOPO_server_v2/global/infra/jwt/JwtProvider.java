@@ -35,7 +35,7 @@ public class JwtProvider {
                 .setSubject(id)
                 .claim("Authorization", memberState)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getAccessExpire()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getAccessExpiration()))
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 .compact();
     }
@@ -46,7 +46,7 @@ public class JwtProvider {
                 .claim("Authorization", memberState)
                 .setSubject(id.toString())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getRefreshExpire()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getRefreshExpiration()))
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 .compact();
     }
