@@ -6,6 +6,7 @@ import kr.hs.dgsw.SOPO_server_v2.global.infra.mail.MailService;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.mail.RandomCode;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthEmailService {
@@ -36,22 +38,19 @@ public class AuthEmailService {
     }
 
     public Response sendMail(String email) {
-        try {
-            String decodedEmail = URLDecoder.decode(email, StandardCharsets.UTF_8);
-            checkEmailDuplicate(decodedEmail);
+            URLDecoder.decode(email, StandardCharsets.UTF_8);
+                checkEmailDuplicate(email);
+
             String authCode = RandomCode.generate();
             mailService.verificationCode(
-                    decodedEmail,
+                    email,
                     "SOPO 회원가입을 위한 이메일 인증코드",
                     authCode
             );
             redisTemplate.opsForValue()
-                    .set(AUTH_CODE_PREFIX + decodedEmail, authCode, Duration.ofMillis(authCodeExpirationMillis));
+                    .set(AUTH_CODE_PREFIX + email, authCode, Duration.ofMillis(authCodeExpirationMillis));
 
             return Response.of(HttpStatus.OK, "이메일 전송 성공");
-        } catch (Exception e) {
-            return Response.of(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 전송 실패: " + e.getMessage());
-        }
     }
 
     public boolean verifiedCode(String email, String code){
