@@ -3,11 +3,13 @@ package kr.hs.dgsw.SOPO_server_v2.domain.auth.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.ReProvideTokenReq;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.SignInReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.SignUpReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.res.ReProvideTokenRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthEmailService;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthService;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthTokenService;
+import kr.hs.dgsw.SOPO_server_v2.global.common.dto.res.JsonWebTokenResponse;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,10 @@ public class AuthController {
         return authService.signUp(signUpReq);
     }
 
-
-
+    @PostMapping("/sign_in")
+    public ResponseData<JsonWebTokenResponse> signIn(
+            @RequestBody @Valid SignInReq signInReq
+            ){
+        return authService.signIn(signInReq);
+    }
 }

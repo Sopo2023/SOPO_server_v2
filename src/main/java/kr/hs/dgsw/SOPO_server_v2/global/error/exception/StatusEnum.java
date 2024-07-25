@@ -35,6 +35,7 @@ public enum StatusEnum {
     PERMISSION_DENIED(403, "Permission denied"),
     WITHDRAWAL_MEMBER(400, "Withdrawal member"),
     INVALID_ROLE(403, "유효하지 않은 권한"),
+    WRONG_PASSWORD(403, "비밀번호가 옳지 않습니다"),
 
     //file
     FILE_NOT_FOUND(404, "File not found"),
