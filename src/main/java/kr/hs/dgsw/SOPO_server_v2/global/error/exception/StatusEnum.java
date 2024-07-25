@@ -49,7 +49,13 @@ public enum StatusEnum {
     MESSAGE_SEND_FAILED(403, "Message send failed"),
     TOKEN_NOT_PROVIDED(400, "Token not provided"),
 
-    CLOUD_EXCEPTION(500, "Cloud exception");
+    CLOUD_EXCEPTION(500, "Cloud exception"),
+
+    // board
+    BOARD_NOT_FOUND(404, "Board not found"),
+
+    // contest
+    CONTEST_NOT_FOUND(404, "Contest not found");
 
     private final int statusCode;
     private final String message;
