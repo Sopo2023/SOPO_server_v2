@@ -19,28 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final AuthTokenService authTokenService;
-    private final AuthEmailService authEmailService;
     private final AuthService authService;
 
-    @PostMapping("/reProvide")
-    public ResponseData<ReProvideTokenRes> reProvideToken(
-            @RequestBody @Valid ReProvideTokenReq reProvideTokenReq
-            ){
-        return authTokenService.reProvideToken(reProvideTokenReq);
-    }
-
-    @PostMapping("/email")
-    public Response requestVerificationCode(
-            @RequestParam(value = "email", required = true) @Validated String email
-    ) {
-        return authEmailService.sendMail(email);
-    }
-
-    @PostMapping("/signUp")
+    @PostMapping("/sign_up")
     public Response signUp(
             @RequestBody @Valid SignUpReq signUpReq
             ){
         return authService.signUp(signUpReq);
     }
+
+
 }

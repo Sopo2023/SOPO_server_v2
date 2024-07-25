@@ -45,7 +45,6 @@ public class SecurityConfig {
                 .addFilterBefore(jwtExceptionFilter, JwtFilter.class)
 
                 .authorizeHttpRequests()
-                .requestMatchers("/sign-in/**","/refresh/**","/test/**","/member/student-search/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/file").hasRole("ACTIVE")
