@@ -1,16 +1,20 @@
 package kr.hs.dgsw.SOPO_server_v2.global.config.security;
 
+import kr.hs.dgsw.SOPO_server_v2.global.error.ErrorResponse;
+import kr.hs.dgsw.SOPO_server_v2.global.error.exception.StatusEnum;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.jwt.JwtExceptionFilter;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -21,7 +25,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
-    private final AccessDeniedHandler accessDeniedHandler;
     private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
@@ -44,11 +47,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/sign-in/**","/refresh/**","/test/**","/member/student-search/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/file").hasRole("ACTIVE")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
                 .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler);
+                .accessDeniedHandler((req, res, e) -> jwtExceptionFilter.responseToClient(res, ErrorResponse.of(StatusEnum.INVALID_ROLE, "권한이 없습니다")))
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.NOT_FOUND));
 
         return http.build();
     }

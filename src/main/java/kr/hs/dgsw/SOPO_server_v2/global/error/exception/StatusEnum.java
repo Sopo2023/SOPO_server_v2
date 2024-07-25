@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+
 @Getter
 @AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
@@ -32,6 +34,7 @@ public enum StatusEnum {
     NOT_AUTHENTICATED(401, "NotAuthenticated"),
     PERMISSION_DENIED(403, "Permission denied"),
     WITHDRAWAL_MEMBER(400, "Withdrawal member"),
+    INVALID_ROLE(403, "유효하지 않은 권한"),
 
     //file
     FILE_NOT_FOUND(404, "File not found"),
@@ -39,12 +42,13 @@ public enum StatusEnum {
 
     //email
     UNABLE_TO_SEND_EMAIL(403, "Unable to send email"),
+    EMAIL_ALREADY_EXIST(404, ""),
 
     //fcm
     MESSAGE_SEND_FAILED(403, "Message send failed"),
-    TOKEN_NOT_PROVIDED(400, "잘못된 토큰"),
+    TOKEN_NOT_PROVIDED(400, "Token not provided"),
 
-    CLOUD_EXCEPTION(500, "클라우드 에러");
+    CLOUD_EXCEPTION(500, "Cloud exception");
 
     private final int statusCode;
     private final String message;

@@ -19,33 +19,32 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "tb_community")
+@Table(name = "tb_member")
 @DynamicUpdate
 public class MemberEntity extends BaseTimeEntity {
     @Id
-    @Size(max = 15)
+    @Size(min = 0, max = 15)
     @Column(name = "member_id")
     private String memberId;
 
     @Column(name = "member_name")
     private String memberName;
 
-    @Size(max = 300)
-    @Column(name = "member_id")
+    @Size(min = 0, max = 300)
+    @Column(name = "member_email")
     private String memberEmail;
 
-    @Size(max = 18)
     @Column(name = "member_password")
     private String memberPassword;
 
     @Column(name = "member_school")
-    private String School;
+    private String memberSchool;
 
     @Column(name = "member_category")
     private MemberCategory memberCategory;
 
-    @Column(name = "member_state")
-    private MemberState memberState;
+    @Builder.Default
+    private MemberState memberState = MemberState.ACTIVE;
 
     @Column(name = "member_fcm_token", columnDefinition = "TEXT")
     private String memberFcmToken;
@@ -55,5 +54,5 @@ public class MemberEntity extends BaseTimeEntity {
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "member_file")
-    private FileEntity profile;
+    private FileEntity memberProfile;
 }
