@@ -6,7 +6,11 @@ import kr.hs.dgsw.SOPO_server_v2.domain.contest.dto.ContestUpdateReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.contest.entity.ContestEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.contest.enums.ContestState;
 import kr.hs.dgsw.SOPO_server_v2.domain.contest.repository.ContestRepository;
+import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
+import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.contest.ContestNotFound;
+import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.UserNotCoincide;
+import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContestService { // 대회 전환 필요 -> ACTIVE
     private final ContestRepository contestRepository;
-
+    private final GetCurrentMember getCurrentMember;
     // 대회 전체 조회
     public ResponseData<List<ContestLoadRes>> getContests() {
         List<ContestEntity> contestList = contestRepository.findAll();
@@ -33,24 +37,30 @@ public class ContestService { // 대회 전환 필요 -> ACTIVE
 
     // 빈 대회 생성
     public ResponseData<Long> createContest() {
-        // 토큰 정보 가져오기
+
+        MemberEntity curMember = getCurrentMember.current();
         ContestEntity contest = ContestEntity.builder()
-                // .member()
+                .member(curMember)
                 .build();
         return ResponseData.of(HttpStatus.OK, "대회 생성 완료", contest.getContestId());
     }
 
     // 대회 업데이트
     public Response loadContest(Long contestId, ContestUpdateReq updateReq) {
-            ContestEntity contest = contestRepository.findById(contestId)
-                    .orElseThrow(() -> ContestNotFound.EXCEPTION);
 
-            // 만약 현재 로그인 유저와 Load 하려는 유저가 다르다면
+        MemberEntity curMember = getCurrentMember.current();
 
-            contest.update(updateReq);
-            ContestLoadRes contestLoadRes = ContestLoadRes.of(contest);
+        ContestEntity contest = contestRepository.findById(contestId)
+                .orElseThrow(() -> ContestNotFound.EXCEPTION);
 
-            return Response.of(HttpStatus.OK, "대회 업데이트 완료");
+        // 만약 현재 로그인 유저와 Load 하려는 유저가 다르다면
+        if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
+            throw UserNotCoincide.EXCEPTION;
+        }
+
+        contest.update(updateReq);
+
+        return Response.of(HttpStatus.OK, "대회 업데이트 완료");
     }
 
     // 대회 단일 조회
@@ -66,10 +76,15 @@ public class ContestService { // 대회 전환 필요 -> ACTIVE
 
     // 대회 삭제
     public Response deleteContest(Long contestId) {
-        // 토큰 정보 받아오기
+
+        MemberEntity curMember = getCurrentMember.current();
+
         ContestEntity contest = contestRepository.findById(contestId)
                 .orElseThrow(() -> ContestNotFound.EXCEPTION);
-        // 만약 만든 사람과 삭제하려는 사람이 일치하지 않고 admin이 아니라면.. error
+
+        if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
+            throw UserNotCoincide.EXCEPTION;
+        }
 
         contestRepository.deleteById(contestId);
         return Response.of(HttpStatus.OK, "대회 삭제 완료");
@@ -77,10 +92,15 @@ public class ContestService { // 대회 전환 필요 -> ACTIVE
 
     // 대회 상태 변경
     public Response changeContestState(Long contestId) {
-        // 토큰 정보 받아오기
+
+        MemberEntity curMember = getCurrentMember.current();
+
         ContestEntity contest = contestRepository.findById(contestId)
                 .orElseThrow(() -> ContestNotFound.EXCEPTION);
-        // 만약 만든 사람과 변경하려는 사람이 일치하지 않고 admin이 아니라면.. error
+
+        if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
+            throw UserNotCoincide.EXCEPTION;
+        }
 
         if (contest.getContestState() == ContestState.ACTIVE) {
             contest.stateUpdateDisabled();
