@@ -48,3 +48,11 @@ jobs:
             docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo_v2
             docker pull ${{ secrets.DOCKER_USERNAME }}/sopo_v2
             docker run -d -p 8080:8080 --name sopo_v2 ${{ secrets.DOCKER_USERNAME }}/sopo_v2
+            
+            sudo docker pull redis:latest
+            sudo docker run -d --name redis -p 6379:6379 --network redis-network redis:latest
+            sudo docker rm -f alimo_redis alimo_app
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/alimo:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/alimo:latest
+            sudo docker run -d --name alimo_redis_new redis:latest
+            docker run -d -p 80:8080 --name alimo ${{ secrets.DOCKER_USERNAME }}/alimo:latest
