@@ -27,13 +27,13 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew bootJar
 
-      - name: Docker build & push to prod
+      - name: Build Docker image and push
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/sopo_v2 . 
           docker push ${{ secrets.DOCKER_USERNAME }}/sopo_v2
 
-      - name: Deploy to prod
+      - name: Deploy to Production
         uses: appleboy/ssh-action@master
         id: deploy-prod
         with:
@@ -43,16 +43,24 @@ jobs:
           port: ${{ secrets.PORT }} #ssh port (22)
           envs: GITHUB_SHA
           script: |
-            docker stop sopo_v2
-            docker rm sopo_v2
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo_v2
+            docker stop sopo_v2 || true
+            docker rm sopo_v2 || true
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo_v2 || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/sopo_v2
             docker run -d -p 8080:8080 --name sopo_v2 ${{ secrets.DOCKER_USERNAME }}/sopo_v2
-            
-            sudo docker pull redis:latest
-            sudo docker run -d --name redis -p 6379:6379 --network redis-network redis:latest
-            sudo docker rm -f alimo_redis alimo_app
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/alimo:latest
+
+            docker stop redis || true
+            docker rm redis || true
+            docker rmi redis || true
+            docker pull redis:latest
+            docker run -d --name redis -p 6379:6379 redis:latest
+
+            docker stop alimo_redis || true
+            docker rm alimo_redis || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/alimo:latest
-            sudo docker run -d --name alimo_redis_new redis:latest
+            docker run -d --name alimo_redis -p 6379:6379 redis:latest
+
+            docker stop alimo || true
+            docker rm alimo || true
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/alimo:latest || true
             docker run -d -p 80:8080 --name alimo ${{ secrets.DOCKER_USERNAME }}/alimo:latest

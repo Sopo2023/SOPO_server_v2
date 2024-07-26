@@ -32,10 +32,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final MemberDetailsService memberDetailsService;
     private final JwtFilter jwtFilter;
     private final JwtExceptionFilter jwtExceptionFilter;
-    private final PasswordEncoder passwordEncoder;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -56,16 +54,16 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/email/**").permitAll()
                 .requestMatchers("/re_provide/**").permitAll()
-                .requestMatchers("/file/**").hasRole("ACTIVE")
-                .requestMatchers("/board/**").hasRole("ACTIVE")
-                .requestMatchers("/contest/**").hasRole("ACTIVE")
-                .requestMatchers("/like/**").hasRole("ACTIVE")
+                .requestMatchers("/file/**").hasAuthority("ROLE_ACTIVE")
+                .requestMatchers("/board/**").hasAuthority("ROLE_ACTIVE")
+                .requestMatchers("/contest/**").hasAuthority("ROLE_ACTIVE")
+                .requestMatchers("/like/**").hasAuthority("ROLE_ACTIVE")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
                 .exceptionHandling()
                 .accessDeniedHandler((req, res, e) -> jwtExceptionFilter.responseToClient(res, ErrorResponse.of(StatusEnum.INVALID_ROLE, "권한이 없습니다")))
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.NOT_FOUND));
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN));
 
         return http.build();
     }
@@ -82,18 +80,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(memberDetailsService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder);
-        return authenticationProvider;
     }
 }
