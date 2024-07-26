@@ -35,7 +35,6 @@ import static kr.hs.dgsw.SOPO_server_v2.global.response.Response.of;
 @Component
 @RequiredArgsConstructor
 public class AuthService {
-    private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final AuthEmailService authEmailService;
     private final MemberRepository memberRepository;
@@ -78,13 +77,9 @@ public class AuthService {
             throw WrongPasswordException.EXCEPTION;
         }
 
-        Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signInReq.memberId(), signInReq.memberPassword()));
-
-        MemberEntity member =  ((CustomMemberDetails) authenticate.getPrincipal()).member();
         return ResponseData.of(HttpStatus.OK, "로그인 성공", JsonWebTokenResponse.builder()
-                .accessToken(jwtProvider.generateAccessToken(member.getMemberId(), member.getMemberState()))
-                .refreshToken(jwtProvider.generateRefreshToken(member.getMemberId(), member.getMemberState()))
+                .accessToken(jwtProvider.generateAccessToken(memberEntity.getMemberId(), memberEntity.getMemberState()))
+                .refreshToken(jwtProvider.generateRefreshToken(memberEntity.getMemberId(), memberEntity.getMemberState()))
                 .build());
     }
 
