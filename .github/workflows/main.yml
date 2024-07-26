@@ -54,13 +54,3 @@ jobs:
             docker rmi redis || true
             docker pull redis:latest
             docker run -d --name redis -p 6379:6379 redis:latest
-
-            docker stop alimo_redis || true
-            docker rm alimo_redis || true
-            docker pull ${{ secrets.DOCKER_USERNAME }}/alimo:latest
-            docker run -d --name alimo_redis -p 6379:6379 redis:latest
-
-            docker stop alimo || true
-            docker rm alimo || true
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/alimo:latest || true
-            docker run -d -p 80:8080 --name alimo ${{ secrets.DOCKER_USERNAME }}/alimo:latest
