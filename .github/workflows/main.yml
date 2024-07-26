@@ -49,13 +49,17 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/sopo_v2
             docker run -d -p 8080:8080 --name sopo_v2 ${{ secrets.DOCKER_USERNAME }}/sopo_v2
             
+            sudo chkconfig --add redis-server
+            sudo chkconfig --level 345 redis-server on
+            sudo service reids-server start
+                      
             # Docker Compose 파일이 있는 디렉토리로 이동
             mkdir -p /home/ubuntu/app
             cd /home/ubuntu/app
             
             # docker-compose.yml 파일을 생성하거나 덮어쓰기
             echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
-            
+        
             # Docker Compose 명령어 실행
             docker-compose pull
             docker-compose up -d
