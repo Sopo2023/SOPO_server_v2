@@ -40,24 +40,24 @@ jobs:
           host: ${{ secrets.HOST_PROD }} # EC2 퍼블릭 IPv4 DNS
           username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }} # EC2 private key
-          port: ${{ secrets.PORT }} #ssh port (22)
+          port: ${{ secrets.PORT }} # ssh port (22)
           envs: GITHUB_SHA
           script: |
+            # 기존 컨테이너와 이미지를 정리
             docker stop sopo_v2 || true
             docker rm sopo_v2 || true
             docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo_v2 || true
-            docker pull ${{ secrets.DOCKER_USERNAME }}/sopo_v2
-            docker run -d -p 8080:8080 --name sopo_v2 ${{ secrets.DOCKER_USERNAME }}/sopo_v2
             
+            # Docker Compose 파일이 있는 디렉토리로 이동
             mkdir -p /home/ubuntu/app
             cd /home/ubuntu/app
-      
-            # 기존 docker-compose.yml 파일을 덮어쓰거나 생성
+            
+            # docker-compose.yml 파일을 생성하거나 덮어쓰기
             echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
-      
+            
             # Docker Compose 명령어 실행
             docker-compose pull
             docker-compose up -d
-      
+            
             # 사용하지 않는 Docker 데이터 정리 (선택 사항)
             docker system prune -f
