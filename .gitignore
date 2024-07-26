@@ -19,7 +19,7 @@ bin/
 
 ### IntelliJ IDEA ###
 application.yml
-docker-compose.yml
+src/main/resources/docker-compose.yml
 
 .DS_Store
 ._.DS_Store
