@@ -48,9 +48,16 @@ jobs:
             docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo_v2 || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/sopo_v2
             docker run -d -p 8080:8080 --name sopo_v2 ${{ secrets.DOCKER_USERNAME }}/sopo_v2
-
-            docker stop redis || true
-            docker rm redis || true
-            docker rmi redis || true
-            docker pull redis:latest
-            docker run -d --name redis -p 6379:6379 redis:latest
+            
+            mkdir -p /home/ubuntu/app
+            cd /home/ubuntu/app
+      
+            # 기존 docker-compose.yml 파일을 덮어쓰거나 생성
+            echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
+      
+            # Docker Compose 명령어 실행
+            docker-compose pull
+            docker-compose up -d
+      
+            # 사용하지 않는 Docker 데이터 정리 (선택 사항)
+            docker system prune -f
