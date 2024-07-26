@@ -41,9 +41,11 @@ public class MemberEntity extends BaseTimeEntity {
     private String memberSchool;
 
     @Column(name = "member_category")
+    @Enumerated(EnumType.STRING)
     private MemberCategory memberCategory;
 
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     private MemberState memberState = MemberState.ACTIVE;
 
     @Column(name = "member_fcm_token", columnDefinition = "TEXT")
