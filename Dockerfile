@@ -1,5 +1,5 @@
 FROM openjdk:17
-WORKDIR /app
-COPY build/libs/myapp.jar app.jar
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} app.jar
 ENV TZ=Asia/Seoul
-ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java","-jar","/app.jar","-Duser.timezone=Asia/Seoul"]
