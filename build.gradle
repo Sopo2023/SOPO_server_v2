@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'kr.hs.dgsw'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.2-SNAPSHOT'
 
 java {
 	toolchain {
@@ -63,3 +63,5 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+jar { enabled = false }
