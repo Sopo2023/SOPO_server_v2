@@ -1,4 +1,4 @@
-name: CI/CD using github actions & docker
+name: CI/CD using GitHub Actions & Docker
 
 on:
   push:
@@ -15,22 +15,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: make application.yml
-        run: |
-          cd ./src/main/resources
-          touch ./application.yml
-          echo "${{ secrets.APPLICATION }}" > ./application.yml
-
-      - name: set chmod
-        run: chmod +x ./gradlew
-
       - name: Build with Gradle
         run: ./gradlew bootJar
+        # Gradle 빌드 후 JAR 파일 생성 확인
+        # 필요에 따라 `ls -l build/libs` 등을 추가하여 파일 존재 확인
 
       - name: Build Docker image and push
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/sopo_v2 . 
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/sopo_v2 .
           docker push ${{ secrets.DOCKER_USERNAME }}/sopo_v2
 
       - name: Deploy to Production
@@ -43,26 +36,28 @@ jobs:
           port: ${{ secrets.PORT }} # ssh port (22)
           envs: GITHUB_SHA
           script: |
+            # EC2에서 기존 Docker 컨테이너 및 이미지 정리
             docker stop sopo_v2 || true
             docker rm sopo_v2 || true
             docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo_v2 || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/sopo_v2
             docker run -d -p 8080:8080 --name sopo_v2 ${{ secrets.DOCKER_USERNAME }}/sopo_v2
             
+            # Redis 서버 시작
             sudo chkconfig --add redis-server
             sudo chkconfig --level 345 redis-server on
-            sudo service reids-server start
-                      
+            sudo service redis-server start
+
             # Docker Compose 파일이 있는 디렉토리로 이동
             mkdir -p /home/ubuntu/app
             cd /home/ubuntu/app
-            
+
             # docker-compose.yml 파일을 생성하거나 덮어쓰기
             echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
-        
+
             # Docker Compose 명령어 실행
             docker-compose pull
             docker-compose up -d
-            
+
             # 사용하지 않는 Docker 데이터 정리 (선택 사항)
             docker system prune -f
