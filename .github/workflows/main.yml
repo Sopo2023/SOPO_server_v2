@@ -52,23 +52,12 @@ jobs:
           port: ${{ secrets.PORT }} # ssh port (22)
           envs: GITHUB_SHA
           script: |
-            docker stop sopo_v2 || true
-            docker rm sopo_v2 || true
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo_v2 || true
-            docker pull ${{ secrets.DOCKER_USERNAME }}/sopo_v2
-            docker run -d -p 8080:8080 --name sopo_v2 ${{ secrets.DOCKER_USERNAME }}/sopo_v2
-            
-            sudo chkconfig --add redis-server
-            sudo chkconfig --level 345 redis-server on
-            sudo service reids-server start
-                      
-            mkdir -p /home/ubuntu/app
-            cd /home/ubuntu/app
-            
-            echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
-        
-            # Docker Compose 명령어 실행
-            docker-compose pull
-            docker-compose up -d
-            
-            docker system prune -f
+            script: |
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker stop sopo
+            docker rm sopo
+            docker network disconnect redis-network sopo
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/sopo:latest
+            docker run -d -p 80:8080 --name sopo ${{ secrets.DOCKER_USERNAME }}/sopo:latest
+            docker network connect redis-network sopo
