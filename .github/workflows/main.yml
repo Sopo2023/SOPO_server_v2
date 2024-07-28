@@ -33,6 +33,12 @@ jobs:
           docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/sopo_v2 . 
           docker push ${{ secrets.DOCKER_USERNAME }}/sopo_v2
 
+      - name: Upload JAR file
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-jar
+          path: build/libs/SOPO_server_v2-0.0.1-SNAPSHOT-plain.jar
+
       - name: Deploy to Production
         uses: appleboy/ssh-action@master
         id: deploy-prod
