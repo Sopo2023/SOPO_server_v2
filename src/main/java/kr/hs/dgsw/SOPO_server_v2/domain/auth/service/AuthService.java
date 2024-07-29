@@ -2,35 +2,23 @@ package kr.hs.dgsw.SOPO_server_v2.domain.auth.service;
 
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.SignInReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.SignUpReq;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.res.TokenRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberState;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.repository.MemberRepository;
-import kr.hs.dgsw.SOPO_server_v2.global.common.dto.res.JsonWebTokenResponse;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.auth.WrongPasswordException;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.email.CodeIsWrongException;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.email.EmailAlreadyExistsException;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.MemberNotFoundException;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.jwt.JwtProvider;
-import kr.hs.dgsw.SOPO_server_v2.global.infra.security.CustomMemberDetails;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
-import java.util.Collections;
-
-import static kr.hs.dgsw.SOPO_server_v2.global.response.Response.of;
 
 @Component
 @RequiredArgsConstructor
@@ -65,7 +53,7 @@ public class AuthService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseData<JsonWebTokenResponse> signIn(SignInReq signInReq){
+    public ResponseData<TokenRes> signIn(SignInReq signInReq){
         MemberEntity memberEntity = memberRepository.findByMemberId(signInReq.memberId());
 
         if(memberEntity == null){
@@ -77,10 +65,7 @@ public class AuthService {
             throw WrongPasswordException.EXCEPTION;
         }
 
-        return ResponseData.of(HttpStatus.OK, "로그인 성공", JsonWebTokenResponse.builder()
-                .accessToken(jwtProvider.generateAccessToken(memberEntity.getMemberId(), memberEntity.getMemberState()))
-                .refreshToken(jwtProvider.generateRefreshToken(memberEntity.getMemberId(), memberEntity.getMemberState()))
-                .build());
+        return ResponseData.of(HttpStatus.OK, "로그인 성공", jwtProvider.generateToken(signInReq.memberId(), memberEntity.getMemberState()));
     }
 
 }
