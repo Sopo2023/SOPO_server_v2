@@ -1,5 +1,4 @@
-FROM openjdk:17
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
+FROM openjdk:17-alpine
+COPY build/libs/sopo-2.0.0.jar /sopo.jar
 ENV TZ=Asia/Seoul
-ENTRYPOINT ["java","-jar","/app.jar","-Duser.timezone=Asia/Seoul"]
+ENTRYPOINT ["java", "-jar", "/sopo.jar", "-Duser.timezone=Asia/Seoul"]
