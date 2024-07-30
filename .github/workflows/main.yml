@@ -58,5 +58,5 @@ jobs:
             sudo docker rm -f sopo_redis sopo_app
             docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/sopo:latest
-            sudo docker run -d --name alimo_redis_new redis:latest
+            sudo docker run -d --name sopo_redis_new redis:latest
             docker run -d -p 80:8080 --name sopo ${{ secrets.DOCKER_USERNAME }}/sopo:latest
