@@ -36,6 +36,10 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x test
 
+        - name: Deploy with SSH
+        if: github.ref == 'refs/heads/main'
+        uses: appleboy/ssh-action@master
+        
       - name: List build/libs contents
         run: ls -la build/libs
 
