@@ -45,6 +45,10 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/sopo .
           docker push ${{ secrets.DOCKER_USERNAME }}/sopo:latest
 
+      - name: Deploy with SSH
+        if: github.ref == 'refs/heads/main'
+        uses: appleboy/ssh-action@master
+
         with:
           host: ${{ secrets.HOST }}
           username: ubuntu
