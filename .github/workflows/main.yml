@@ -49,10 +49,10 @@ jobs:
         uses: appleboy/ssh-action@master
         id: deploy-prod
         with:
-          host: ${{ secrets.HOST_PROD }} # EC2 퍼블릭 IPv4 DNS
+          host: ${{ secrets.HOST_PROD }} 
           username: ubuntu
-          key: ${{ secrets.PRIVATE_KEY }} # EC2 private key
-          port: ${{ secrets.PORT }} #ssh port (22)
+          key: ${{ secrets.PRIVATE_KEY }} 
+          port: ${{ secrets.PORT }}
           envs: GITHUB_SHA
           script: |
             script: |
@@ -64,5 +64,5 @@ jobs:
             sudo docker rm -f sopo_redis sopo_app
             docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/sopo:latest
-            sudo docker run -d --name alimo_redis_new redis:latest
+            sudo docker run -d --name sopo_redis_new redis:latest
             docker run -d -p 80:8080 --name sopo ${{ secrets.DOCKER_USERNAME }}/sopo:latest
