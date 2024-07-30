@@ -36,11 +36,15 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x test
 
+      - name: List build/libs contents
+        run: ls -la build/libs
+
       - name: Docker build
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/sopo .
           docker push ${{ secrets.DOCKER_USERNAME }}/sopo:latest
+          
 
       - name: Deploy with SSH
         if: github.ref == 'refs/heads/main'
