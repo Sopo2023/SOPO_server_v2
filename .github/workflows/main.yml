@@ -3,14 +3,20 @@ name: CI/CD using github actions & docker
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+      branches: "main"
+
+permissions:
+  contents: read
 
 jobs:
-  CI-CD:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -28,14 +34,17 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        run: ./gradlew bootJar
+        run: ./gradlew build -x test
+
+      - name: List build/libs contents
+        run: ls -la build/libs
 
       - name: Docker build
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t alimo . # Dockerfile 경로 수정
-          docker tag alimo ${{ secrets.DOCKER_USERNAME }}/alimo:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/alimo:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/sopo .
+          docker push ${{ secrets.DOCKER_USERNAME }}/sopo:latest
+          
 
       - name: Deploy with SSH
         if: github.ref == 'refs/heads/main'
@@ -48,23 +57,14 @@ jobs:
           port: ${{ secrets.PORT }} # ssh port (22)
           envs: GITHUB_SHA
           script: |
-            docker stop sopo_v2 || true
-            docker rm sopo_v2 || true
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo_v2 || true
-            docker pull ${{ secrets.DOCKER_USERNAME }}/sopo_v2
-            docker run -d -p 8080:8080 --name sopo_v2 ${{ secrets.DOCKER_USERNAME }}/sopo_v2
-            
-            sudo chkconfig --add redis-server
-            sudo chkconfig --level 345 redis-server on
-            sudo service reids-server start
-                      
-            mkdir -p /home/ubuntu/app
-            cd /home/ubuntu/app
-            
-            echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
-        
-            # Docker Compose 명령어 실행
-            docker-compose pull
-            docker-compose up -d
-            
-            docker system prune -f
+            script: |
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker stop sopo
+            docker rm sopo
+            sudo docker pull redis:latest
+            sudo docker run -d --name redis -p 6379:6379 --network redis-network redis:latest
+            sudo docker rm -f sopo_redis sopo_app
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/sopo:latest
+            sudo docker run -d --name alimo_redis_new redis:latest
+            docker run -d -p 80:8080 --name sopo ${{ secrets.DOCKER_USERNAME }}/sopo:latest
