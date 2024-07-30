@@ -21,9 +21,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Build with Gradle
         run: ./gradlew build
 
@@ -35,6 +32,9 @@ jobs:
 
       - name: set chmod
         run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew bootJar
 
       - name: Docker build
         run: |
