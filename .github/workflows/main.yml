@@ -52,7 +52,7 @@ jobs:
       - name: Deploy with SSH
         if: github.ref == 'refs/heads/main'
         uses: appleboy/ssh-action@master
-
+        id: deploy-prod
         with:
           host: ${{ secrets.HOST_PROD }}
           username: ubuntu
