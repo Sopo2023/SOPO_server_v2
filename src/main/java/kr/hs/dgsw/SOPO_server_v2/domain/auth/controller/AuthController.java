@@ -6,6 +6,7 @@ import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.ReProvideTokenReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.SignInReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.SignUpReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.res.ReProvideTokenRes;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.res.TokenRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthEmailService;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthService;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthTokenService;
@@ -31,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign_in")
-    public ResponseData<JsonWebTokenResponse> signIn(
+    public ResponseData<TokenRes> signIn(
             @RequestBody @Valid SignInReq signInReq
             ){
         return authService.signIn(signInReq);

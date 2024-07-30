@@ -4,24 +4,15 @@ import kr.hs.dgsw.SOPO_server_v2.global.error.ErrorResponse;
 import kr.hs.dgsw.SOPO_server_v2.global.error.exception.StatusEnum;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.jwt.JwtExceptionFilter;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.jwt.JwtFilter;
-import kr.hs.dgsw.SOPO_server_v2.global.infra.security.CustomMemberDetails;
-import kr.hs.dgsw.SOPO_server_v2.global.infra.security.MemberDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -55,8 +46,7 @@ public class SecurityConfig {
                 .requestMatchers("/email/**").permitAll()
                 .requestMatchers("/re_provide/**").permitAll()
                 .requestMatchers("/file/**").hasAuthority("ROLE_ACTIVE")
-                .requestMatchers("/board/**").hasAuthority("ROLE_ACTIVE")
-                .requestMatchers("/contest/**").hasAuthority("ROLE_ACTIVE")
+                .requestMatchers("/contest/**").authenticated()
                 .requestMatchers("/like/**").hasAuthority("ROLE_ACTIVE")
                 .anyRequest().authenticated()
                 .and()

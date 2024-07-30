@@ -7,6 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class GetCurrentMember {
     public MemberEntity current() {
-        return ((CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).member();
+        return getMemberDetails().member();
+    }
+
+    private CustomMemberDetails getMemberDetails() {
+        return ((CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 }
