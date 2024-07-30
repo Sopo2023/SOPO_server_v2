@@ -56,8 +56,10 @@ jobs:
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker stop sopo
             docker rm sopo
-            docker network disconnect redis-network sopo
+            sudo docker pull redis:latest
+            sudo docker run -d --name redis -p 6379:6379 --network redis-network redis:latest
+            sudo docker rm -f sopo_redis sopo_app
             docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/sopo:latest
+            sudo docker run -d --name alimo_redis_new redis:latest
             docker run -d -p 80:8080 --name sopo ${{ secrets.DOCKER_USERNAME }}/sopo:latest
-            docker network connect redis-network sopo
