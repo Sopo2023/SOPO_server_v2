@@ -13,10 +13,6 @@ java {
 	}
 }
 
-jar {
-	archiveFileName.set('sopo-2.0.0.jar')
-}
-
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
