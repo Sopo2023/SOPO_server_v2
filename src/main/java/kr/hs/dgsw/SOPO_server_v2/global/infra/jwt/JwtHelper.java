@@ -26,7 +26,7 @@ public class JwtHelper {
     @Transactional
     public Authentication getAuthentication(String accessToken) {
         Claims claims = getClaims(accessToken);
-        MemberEntity member = memberRepository.findByMemberId(claiㅎms.getSubject());
+        MemberEntity member = memberRepository.findByMemberId(claims.getSubject());
 
         CustomMemberDetails details = new CustomMemberDetails(member);
 
