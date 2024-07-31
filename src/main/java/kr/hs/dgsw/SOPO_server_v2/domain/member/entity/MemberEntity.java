@@ -57,4 +57,10 @@ public class MemberEntity extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "member_file")
     private FileEntity memberProfile;
+
+    public void update(String memberName, String memberEmail, String memberPassword){
+        this.memberName = memberName;
+        this.memberEmail = memberEmail;
+        this.memberPassword = memberPassword;
+    }
 }

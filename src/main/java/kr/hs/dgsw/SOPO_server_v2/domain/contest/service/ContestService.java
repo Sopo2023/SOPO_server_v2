@@ -9,7 +9,7 @@ import kr.hs.dgsw.SOPO_server_v2.domain.contest.repository.ContestRepository;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.contest.ContestNotFound;
-import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.UserNotCoincide;
+import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.MemberNotCoincideException;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
@@ -67,7 +67,7 @@ public class ContestService { // 대회 전환 필요 -> ACTIVE
 
         // 만약 현재 로그인 유저와 Load 하려는 유저가 다르다면
         if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw UserNotCoincide.EXCEPTION;
+            throw MemberNotCoincideException.EXCEPTION;
         }
 
         contest.update(updateReq);
@@ -95,7 +95,7 @@ public class ContestService { // 대회 전환 필요 -> ACTIVE
                 .orElseThrow(() -> ContestNotFound.EXCEPTION);
 
         if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw UserNotCoincide.EXCEPTION;
+            throw MemberNotCoincideException.EXCEPTION;
         }
 
         contestRepository.deleteById(contestId);
@@ -111,7 +111,7 @@ public class ContestService { // 대회 전환 필요 -> ACTIVE
                 .orElseThrow(() -> ContestNotFound.EXCEPTION);
 
         if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw UserNotCoincide.EXCEPTION;
+            throw MemberNotCoincideException.EXCEPTION;
         }
 
         if (contest.getContestState() == ContestState.ACTIVE) {

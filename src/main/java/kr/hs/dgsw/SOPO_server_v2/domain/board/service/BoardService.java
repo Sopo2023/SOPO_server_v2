@@ -8,7 +8,7 @@ import kr.hs.dgsw.SOPO_server_v2.domain.board.repository.BoardRepository;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.board.BoardNotFound;
-import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.UserNotCoincide;
+import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.MemberNotCoincideException;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
@@ -62,7 +62,7 @@ public class BoardService {
 
         // 만약 현재 로그인 유저와 Load 하려는 유저가 다르고, admin 아니라면
         if (!board.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw UserNotCoincide.EXCEPTION;
+            throw MemberNotCoincideException.EXCEPTION;
         }
 
         board.update(updateReq);
@@ -88,7 +88,7 @@ public class BoardService {
 
         // 만약 만든 사람과 삭제하려는 사람이 일치하지 않고 admin 아니라면.. error
         if (!board.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw UserNotCoincide.EXCEPTION;
+            throw MemberNotCoincideException.EXCEPTION;
         }
 
         boardRepository.deleteById(boardId);

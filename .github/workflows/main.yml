@@ -11,7 +11,6 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -28,36 +27,42 @@ jobs:
           touch ./application.yml
           echo "${{ secrets.APPLICATION }}" > ./application.yml
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: set chmod
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        run: ./gradlew bootJar
+        run: ./gradlew build
+
+      - name: List build/libs contents
+        run: ls -la build/libs
 
       - name: Docker build
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t sopo . # Dockerfile 경로 수정
-          docker tag sopo ${{ secrets.DOCKER_USERNAME }}/sopo:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/sopo .
           docker push ${{ secrets.DOCKER_USERNAME }}/sopo:latest
 
-      - name: Deploy with SSH
-        if: github.ref == 'refs/heads/main'
+      - name: Deploy to prod
         uses: appleboy/ssh-action@master
-
+        id: deploy-prod
         with:
-          host: ${{ secrets.HOST }} # EC2 인스턴스 퍼블릭 DNS
+          host: ${{ secrets.HOST_PROD }} 
           username: ubuntu
-          key: ${{ secrets.PRIVATE_KEY }} # pem 키
-          port: ${{ secrets.PORT }} # ssh port (22)
+          key: ${{ secrets.PRIVATE_KEY }} 
+          port: ${{ secrets.PORT }}
           envs: GITHUB_SHA
           script: |
             script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker stop sopo
             docker rm sopo
-            docker network disconnect redis-network sopo
+            sudo docker pull redis:latest
+            sudo docker run -d --name redis -p 6379:6379 --network redis-network redis:latest
+            sudo docker rm -f sopo_redis sopo_app
             docker rmi ${{ secrets.DOCKER_USERNAME }}/sopo:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/sopo:latest
+            sudo docker run -d --name sopo_redis_new redis:latest
             docker run -d -p 80:8080 --name sopo ${{ secrets.DOCKER_USERNAME }}/sopo:latest
-            docker network connect redis-network sopo
