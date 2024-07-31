@@ -41,9 +41,11 @@ public class LikeService {
             if (like.isEmpty()) {
                 addBoardLike(curMember, board);
                 board.likeUpdate(1);
+                return Response.of(HttpStatus.OK, "좋아요 생성 완료");
             } else {
                 boardRepository.delete(like.get().getBoard());
                 board.likeUpdate(-1);
+                return Response.of(HttpStatus.OK, "좋아요 취소 완료");
             }
         }
 
@@ -58,17 +60,17 @@ public class LikeService {
             if (like.isEmpty()) {
                 addContestLike(curMember, contest);
                 contest.likeUpdate(1);
+                return Response.of(HttpStatus.OK, "좋아요 생성 완료");
             } else {
                 contestRepository.delete(like.get().getContest());
                 contest.likeUpdate(1);
+                return Response.of(HttpStatus.OK, "좋아요 취소 완료");
             }
         }
 
-        // else if (프로필) {}
-
-        return Response.of(HttpStatus.OK, "좋아요 생성/취소 완료");
-
-
+        else { // 여기다가 프로필 만드셈
+            return Response.of(HttpStatus.OK, "???");
+        }
 
     }
 

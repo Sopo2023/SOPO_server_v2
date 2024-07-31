@@ -89,6 +89,10 @@ public class ContestEntity extends BaseTimeEntity {
         this.contestLikeCount += contestLikeCount;
     }
 
+    public void addContestPerson(int contestPerson) {
+        this.contestPerson += contestPerson;
+    }
+
     public void stateUpdateActive() {
         this.contestState = ContestState.ACTIVE;
     }

@@ -42,9 +42,9 @@ public class ContestService { // 대회 전환 필요 -> ACTIVE
         MemberEntity curMember = getCurrentMember.current();
 
         ContestEntity contest = ContestEntity.builder()
-                .contestMax(null)
+                .contestMax(0)
                 .contestContent(null)
-                .contestPerson(null)
+                .contestPerson(0)
                 .contestState(ContestState.ACTIVE)
                 .contestLikeCount(0)
                 .contestDateTime(null)
