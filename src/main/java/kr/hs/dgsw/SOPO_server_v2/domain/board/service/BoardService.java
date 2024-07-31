@@ -43,15 +43,18 @@ public class BoardService {
         BoardEntity board = BoardEntity.builder()
                 .boardTitle(null)
                 .boardContent(null)
+                .boardLikeCount(0)
                 .file(null)
                 .member(curMember)
                 .build();
+
+        boardRepository.save(board);
 
         return ResponseData.of(HttpStatus.OK, "빈 게시물 생성 완료", board.getBoardId());
     }
 
     // 게시글 업데이트
-    public Response loadBoard(Long boardId, BoardUpdateReq updateReq) {
+    public Response updateBoard(Long boardId, BoardUpdateReq updateReq) {
         MemberEntity curMember = getCurrentMember.current();
 
         BoardEntity board = boardRepository.findById(boardId)
@@ -63,6 +66,7 @@ public class BoardService {
         }
 
         board.update(updateReq);
+
         return Response.of(HttpStatus.OK, "게시물 업데이트 완료");
     }
 

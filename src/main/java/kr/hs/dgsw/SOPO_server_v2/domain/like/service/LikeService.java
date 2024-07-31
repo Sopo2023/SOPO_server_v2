@@ -31,8 +31,7 @@ public class LikeService {
 
     public Response toggle(Long id, LikeCategory category) {
         MemberEntity curMember = getCurrentMember.current();
-        // 토큰 가져오기
-        // 게시물 좋아요일 때
+
         if (category == LikeCategory.BOARD) {
             BoardEntity board = boardRepository.findById(id)
                     .orElseThrow(() -> BoardNotFound.EXCEPTION);

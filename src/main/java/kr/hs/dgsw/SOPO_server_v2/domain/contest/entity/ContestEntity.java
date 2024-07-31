@@ -5,6 +5,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -17,14 +19,14 @@ import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.global.common.entity.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "tbl_contest")
 @NoArgsConstructor
@@ -34,6 +36,7 @@ public class ContestEntity extends BaseTimeEntity {
     // 대회 아이디
     @Id
     @Column(name = "contest_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long contestId;
 
     // 대회 제목

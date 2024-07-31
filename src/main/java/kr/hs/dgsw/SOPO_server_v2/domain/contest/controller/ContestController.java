@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -32,22 +34,22 @@ public class ContestController {
     }
 
     @GetMapping
-    public ResponseData<ContestLoadRes> getContest(Long contestId) {
+    public ResponseData<ContestLoadRes> getContest(@RequestParam Long contestId) {
         return contestService.findOneContest(contestId);
     }
 
     @PatchMapping
-    public Response loadContest(Long contestId, ContestUpdateReq updateReq) {
-        return contestService.loadContest(contestId, updateReq);
+    public Response updateContest(@RequestParam Long contestId, @RequestBody ContestUpdateReq updateReq) {
+        return contestService.updateContest(contestId, updateReq);
     }
 
     @DeleteMapping
-    public Response deleteContest(Long contestId) {
+    public Response deleteContest(@RequestParam Long contestId) {
         return contestService.deleteContest(contestId);
     }
 
     @PatchMapping("/state")
-    public Response changeContestState(Long contestId) {
+    public Response changeContestState(@RequestParam Long contestId) {
         return contestService.changeContestState(contestId);
     }
 }
