@@ -44,13 +44,15 @@ public class MemberEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MemberCategory memberCategory;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private MemberState memberState;
+    private MemberState memberState = MemberState.ACTIVE;
 
     @Column(name = "member_fcm_token", columnDefinition = "TEXT")
     private String memberFcmToken;
 
-    private Boolean isOffAlarm;
+    @Builder.Default
+    private Boolean isOffAlarm = Boolean.FALSE;
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "member_file")
