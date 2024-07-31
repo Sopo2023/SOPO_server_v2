@@ -45,12 +45,12 @@ public class MemberEntity extends BaseTimeEntity {
     private MemberCategory memberCategory;
 
     @Enumerated(EnumType.STRING)
-    private MemberState memberState = MemberState.ACTIVE;
+    private MemberState memberState;
 
     @Column(name = "member_fcm_token", columnDefinition = "TEXT")
     private String memberFcmToken;
 
-    private Boolean isOffAlarm = Boolean.FALSE;
+    private Boolean isOffAlarm;
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "member_file")
