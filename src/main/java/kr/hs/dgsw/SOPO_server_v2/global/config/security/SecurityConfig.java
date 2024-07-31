@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .requestMatchers("/email/**").permitAll()
                 .requestMatchers("/re_provide/**").permitAll()
                 .requestMatchers("/file/**").hasAuthority("ROLE_ACTIVE")
+                .requestMatchers("/member/**").hasAuthority("ROLE_ACTIVE")
                 .requestMatchers("/contest/**").authenticated()
                 .requestMatchers("/like/**").hasAuthority("ROLE_ACTIVE")
                 .anyRequest().authenticated()
