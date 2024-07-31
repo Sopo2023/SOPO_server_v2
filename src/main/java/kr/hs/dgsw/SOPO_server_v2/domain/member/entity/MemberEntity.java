@@ -6,16 +6,14 @@ import kr.hs.dgsw.SOPO_server_v2.domain.file.entity.FileEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberState;
 import kr.hs.dgsw.SOPO_server_v2.global.common.entity.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
+@Setter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
@@ -57,10 +55,4 @@ public class MemberEntity extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "member_file")
     private FileEntity memberProfile;
-
-    public void update(String memberName, String memberEmail, String memberPassword){
-        this.memberName = memberName;
-        this.memberEmail = memberEmail;
-        this.memberPassword = memberPassword;
-    }
 }
