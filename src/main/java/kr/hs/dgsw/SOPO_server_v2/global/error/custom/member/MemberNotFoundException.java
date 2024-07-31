@@ -8,6 +8,6 @@ public class MemberNotFoundException extends BusinessException {
     public static final BusinessException EXCEPTION = new MemberNotFoundException();
 
     public MemberNotFoundException() {
-        super(StatusEnum.USER_NOT_FOUND);
+        super(StatusEnum.MEMBER_NOT_FOUND);
     }
 }
