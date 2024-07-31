@@ -12,7 +12,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.thymeleaf.TemplateEngine;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -26,7 +25,6 @@ public class AuthEmailService {
     private final MemberRepository memberRepository;
     private final MailService mailService;
     private final StringRedisTemplate redisTemplate;
-    private final TemplateEngine templateEngine;
 
     @Value("${spring.mail.auth-code-expiration-millis}")
     private long authCodeExpirationMillis;
