@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Size;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.entity.FileEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberState;
-import kr.hs.dgsw.SOPO_server_v2.domain.member.presentation.dto.req.MemberModifyReq;
 import kr.hs.dgsw.SOPO_server_v2.global.common.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
