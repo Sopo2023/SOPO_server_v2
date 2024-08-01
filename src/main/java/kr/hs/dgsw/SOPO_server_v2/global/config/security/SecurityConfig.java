@@ -51,6 +51,7 @@ public class SecurityConfig {
                 .requestMatchers("/member/**").hasAuthority("ROLE_ACTIVE")
                 .requestMatchers("/contest/**").hasAuthority("ROLE_ACTIVE")
                 .requestMatchers("/like/**").hasAuthority("ROLE_ACTIVE")
+                .requestMatchers("/profile/**").hasAuthority("ROLE_ACTIVE")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()

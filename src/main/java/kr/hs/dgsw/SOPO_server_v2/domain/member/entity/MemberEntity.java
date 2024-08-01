@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.entity.FileEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberState;
+import kr.hs.dgsw.SOPO_server_v2.domain.portfolio.entity.PortfolioEntity;
 import kr.hs.dgsw.SOPO_server_v2.global.common.entity.BaseTimeEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -56,4 +57,8 @@ public class MemberEntity extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "member_file")
     private FileEntity memberProfile;
+
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "member_portfolio")
+    private PortfolioEntity portfolioEntity;
 }
