@@ -19,14 +19,9 @@ public class MemberService {
     private final GetCurrentMember getCurrentMember;
 
     @Transactional(rollbackFor = Exception.class)
-    public Response deleteMember(String memberId){
-        MemberEntity member = memberRepository.findByMemberId(memberId);
-
-        if (!getCurrentMember.current().equals(member))
-            throw MemberNotCoincideException.EXCEPTION;
-
+    public Response deleteMember(){
+        MemberEntity member = memberRepository.findByMemberId(getCurrentMember.current(););
         member.setMemberState(MemberState.DELETED);
-
         return Response.of(HttpStatus.OK, "성공");
     }
 
