@@ -24,5 +24,11 @@ public class MemberProfileController {
             @RequestBody MemberModifyReq memberModifyReq) {
         return memberProfileService.memberModify(memberModifyReq);
     }
+
+    @Operation(description = "나의 프로필 보기")
+    @GetMapping
+    public ResponseData<ReadProfileRes> readProfile(){
+        return memberProfileService.readProfile();
+    }
 }
 
