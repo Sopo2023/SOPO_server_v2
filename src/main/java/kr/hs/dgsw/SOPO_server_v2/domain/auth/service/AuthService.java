@@ -5,6 +5,7 @@ import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.SignUpReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.res.TokenRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
+import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberState;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.repository.MemberRepository;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.auth.WrongPasswordException;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.email.CodeIsWrongException;
@@ -29,8 +30,9 @@ public class AuthService {
 
     @Transactional(rollbackFor = Exception.class)
     public Response signUp(SignUpReq signUpReq) {
-        if (memberRepository.existsByMemberEmail(signUpReq.memberEmail()))
+        if (memberRepository.existsByMemberEmail(signUpReq.memberEmail())){
             throw EmailAlreadyExistsException.EXCEPTION;
+        }
 
         if (memberRepository.existsByMemberId(signUpReq.memberId()))
             throw IdAlreadyExistException.EXCEPTION;
@@ -56,7 +58,7 @@ public class AuthService {
     public ResponseData<TokenRes> signIn(SignInReq signInReq){
         MemberEntity memberEntity = memberRepository.findByMemberId(signInReq.memberId());
 
-        if(memberEntity == null){
+        if(memberEntity == null || memberEntity.getMemberState().equals(MemberState.DELETED)) {
             throw MemberNotFoundException.EXCEPTION;
         }
 

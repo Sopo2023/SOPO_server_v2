@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.hs.dgsw.SOPO_server_v2.global.error.ErrorResponse;
+import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.InvalidRoleException;
 import kr.hs.dgsw.SOPO_server_v2.global.error.exception.StatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
