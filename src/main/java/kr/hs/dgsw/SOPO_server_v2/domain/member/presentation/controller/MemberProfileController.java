@@ -1,5 +1,6 @@
 package kr.hs.dgsw.SOPO_server_v2.domain.member.presentation.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.presentation.dto.req.MemberModifyReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.presentation.dto.res.ReadProfileRes;
@@ -17,15 +18,11 @@ public class MemberProfileController {
 
     private final MemberProfileService memberProfileService;
 
+    @Operation(description = "멤버 프로필 수정")
     @PatchMapping("")
     public Response modifyMember(
             @RequestBody MemberModifyReq memberModifyReq) {
         return memberProfileService.memberModify(memberModifyReq);
-    }
-
-    @GetMapping
-    public ResponseData<ReadProfileRes> loadProfile(){
-        return memberProfileService.loadProfile();
     }
 }
 

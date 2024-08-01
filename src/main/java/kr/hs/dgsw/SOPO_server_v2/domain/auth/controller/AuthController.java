@@ -1,5 +1,6 @@
 package kr.hs.dgsw.SOPO_server_v2.domain.auth.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.ReProvideTokenReq;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
 
+    @Operation(description = "회원가입")
     @PostMapping("/sign_up")
     public Response signUp(
             @RequestBody @Valid SignUpReq signUpReq
@@ -31,6 +33,7 @@ public class AuthController {
         return authService.signUp(signUpReq);
     }
 
+    @Operation(description = "로그인")
     @PostMapping("/sign_in")
     public ResponseData<TokenRes> signIn(
             @RequestBody @Valid SignInReq signInReq

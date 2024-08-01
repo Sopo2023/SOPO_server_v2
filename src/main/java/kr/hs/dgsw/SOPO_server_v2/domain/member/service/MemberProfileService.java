@@ -55,10 +55,5 @@ public class MemberProfileService {
         return Response.of(HttpStatus.OK, "성공");
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public ResponseData<ReadProfileRes> loadProfile(){
-        MemberEntity member = getCurrentMember.current();
 
-        return ResponseData.of(HttpStatus.OK, "조회 성공", ReadProfileRes.of(memberRepository.findByMemberId(member.getMemberId())));
-    }
 }
