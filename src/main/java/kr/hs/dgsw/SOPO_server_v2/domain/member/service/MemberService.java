@@ -20,7 +20,7 @@ public class MemberService {
 
     @Transactional(rollbackFor = Exception.class)
     public Response deleteMember(){
-        MemberEntity member = memberRepository.findByMemberId(getCurrentMember.current(););
+        MemberEntity member = memberRepository.findByMemberId(getCurrentMember.current().getMemberId());
         member.setMemberState(MemberState.DELETED);
         return Response.of(HttpStatus.OK, "성공");
     }
