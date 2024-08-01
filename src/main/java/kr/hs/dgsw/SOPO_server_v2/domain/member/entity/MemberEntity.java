@@ -19,6 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "tb_member")
 @DynamicUpdate
+@AllArgsConstructor
 public class MemberEntity extends BaseTimeEntity {
     @Id
     @Size(min = 0, max = 15)
