@@ -14,17 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
-    private final MemberProfileService memberProfileService;
-    @PatchMapping("/profile")
-    public Response modifyMember(
-            @RequestBody MemberModifyReq memberModifyReq){
-        return memberProfileService.memberModify(memberModifyReq);
-    }
-
     @PatchMapping()
-    public Response deleteMember(
-            @RequestParam String memberId
-    ){
-        return memberService.deleteMember(memberId);
+    public Response deleteMember(){
+        return memberService.deleteMember();
     }
 }

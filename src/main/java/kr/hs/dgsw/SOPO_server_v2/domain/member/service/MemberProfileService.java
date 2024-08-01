@@ -3,11 +3,13 @@ package kr.hs.dgsw.SOPO_server_v2.domain.member.service;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthEmailService;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.presentation.dto.req.MemberModifyReq;
+import kr.hs.dgsw.SOPO_server_v2.domain.member.presentation.dto.res.ReadProfileRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.repository.MemberRepository;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.email.CodeIsWrongException;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.NeedAuthCode;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
+import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -53,7 +55,10 @@ public class MemberProfileService {
         return Response.of(HttpStatus.OK, "성공");
     }
 
-    public Response loadProfile(){
-        return null;
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseData<ReadProfileRes> loadProfile(){
+        MemberEntity member = getCurrentMember.current();
+
+        return ResponseData.of(HttpStatus.OK, "조회 성공", ReadProfileRes.of(memberRepository.findByMemberId(member.getMemberId())));
     }
 }
