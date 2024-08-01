@@ -3,7 +3,7 @@ package kr.hs.dgsw.SOPO_server_v2.domain.member.service;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthEmailService;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.presentation.dto.req.MemberModifyReq;
-import kr.hs.dgsw.SOPO_server_v2.domain.member.presentation.dto.res.LoadProfileRes;
+import kr.hs.dgsw.SOPO_server_v2.domain.member.presentation.dto.res.ReadProfileRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.repository.MemberRepository;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.email.CodeIsWrongException;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.NeedAuthCode;
@@ -56,9 +56,9 @@ public class MemberProfileService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseData<LoadProfileRes> loadProfile(){
+    public ResponseData<ReadProfileRes> loadProfile(){
         MemberEntity member = getCurrentMember.current();
 
-        return ResponseData.of(HttpStatus.OK, "조회 성공", LoadProfileRes.of(memberRepository.findByMemberId(member.getMemberId())));
+        return ResponseData.of(HttpStatus.OK, "조회 성공", ReadProfileRes.of(memberRepository.findByMemberId(member.getMemberId())));
     }
 }
