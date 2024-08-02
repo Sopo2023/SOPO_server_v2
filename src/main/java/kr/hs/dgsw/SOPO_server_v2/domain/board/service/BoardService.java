@@ -10,6 +10,7 @@ import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.board.BoardNotFound;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.MemberNotCoincideException;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
+import kr.hs.dgsw.SOPO_server_v2.global.page.PageRequest;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,11 +29,14 @@ public class BoardService {
     private final GetCurrentMember getCurrentMember;
 
     // 게시글 전체 조회
-    public ResponseData<List<BoardLoadRes>> getBoards() {
+    public ResponseData<List<BoardLoadRes>> getBoards(PageRequest pageRequest) {
         List<BoardEntity> boardList = boardRepository.findAll();
-        List<BoardLoadRes> boardLoadResList = boardList.stream().map(
-                BoardLoadRes::of
-        ).toList();
+
+        List<BoardLoadRes> boardLoadResList = boardList.stream()
+                .map(BoardLoadRes::of)
+                .skip((pageRequest.page() -1) * pageRequest.size())
+                .limit(pageRequest.size())
+                .collect(Collectors.toList());
 
         return ResponseData.of(HttpStatus.OK, "게시물 전체 조회 완료", boardLoadResList);
     }
@@ -43,15 +48,18 @@ public class BoardService {
         BoardEntity board = BoardEntity.builder()
                 .boardTitle(null)
                 .boardContent(null)
+                .boardLikeCount(0)
                 .file(null)
                 .member(curMember)
                 .build();
+
+        boardRepository.save(board);
 
         return ResponseData.of(HttpStatus.OK, "빈 게시물 생성 완료", board.getBoardId());
     }
 
     // 게시글 업데이트
-    public Response loadBoard(Long boardId, BoardUpdateReq updateReq) {
+    public Response updateBoard(Long boardId, BoardUpdateReq updateReq) {
         MemberEntity curMember = getCurrentMember.current();
 
         BoardEntity board = boardRepository.findById(boardId)
@@ -63,6 +71,7 @@ public class BoardService {
         }
 
         board.update(updateReq);
+
         return Response.of(HttpStatus.OK, "게시물 업데이트 완료");
     }
 

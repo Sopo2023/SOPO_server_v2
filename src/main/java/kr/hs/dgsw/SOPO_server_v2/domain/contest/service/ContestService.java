@@ -11,6 +11,7 @@ import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.contest.ContestNotFound;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.MemberNotCoincideException;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
+import kr.hs.dgsw.SOPO_server_v2.global.page.PageRequest;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
@@ -18,35 +19,52 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ContestService { // 대회 전환 필요 -> ACTIVE
+public class ContestService {
+
     private final ContestRepository contestRepository;
     private final GetCurrentMember getCurrentMember;
+
     // 대회 전체 조회
-    public ResponseData<List<ContestLoadRes>> getContests() {
+    public ResponseData<List<ContestLoadRes>> getContests(PageRequest pageRequest) {
         List<ContestEntity> contestList = contestRepository.findAll();
-        List<ContestLoadRes> contestLoadRes = contestList.stream().map(
-                ContestLoadRes :: of
-        ).toList();
+
+        List<ContestLoadRes> contestLoadRes = contestList.stream()
+                .map(ContestLoadRes::of)
+                .skip((pageRequest.page() -1) * pageRequest.size())
+                .limit(pageRequest.size())
+                .collect(Collectors.toList());
 
         return ResponseData.of(HttpStatus.OK, "대회 전체 조회 완료", contestLoadRes);
     }
 
     // 빈 대회 생성
     public ResponseData<Long> createContest() {
-
         MemberEntity curMember = getCurrentMember.current();
+
         ContestEntity contest = ContestEntity.builder()
+                .contestMax(0)
+                .contestContent(null)
+                .contestPerson(0)
+                .contestState(ContestState.ACTIVE)
+                .contestLikeCount(0)
+                .contestDateTime(null)
+                .memberIdList(null)
+                .file(null)
                 .member(curMember)
                 .build();
+
+        contestRepository.save(contest);
+
         return ResponseData.of(HttpStatus.OK, "대회 생성 완료", contest.getContestId());
     }
 
     // 대회 업데이트
-    public Response loadContest(Long contestId, ContestUpdateReq updateReq) {
+    public Response updateContest(Long contestId, ContestUpdateReq updateReq) {
 
         MemberEntity curMember = getCurrentMember.current();
 
