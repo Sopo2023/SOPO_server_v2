@@ -1,5 +1,6 @@
 package kr.hs.dgsw.SOPO_server_v2.domain.auth.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.ReProvideTokenReq;
@@ -20,6 +21,7 @@ public class TokenController {
 
     private final AuthTokenService authTokenService;
 
+    @Operation(description = "토큰 refresh")
     @PostMapping("")
     public ResponseData<ReProvideTokenRes> reProvideToken(
             @RequestBody @Valid ReProvideTokenReq reProvideTokenReq

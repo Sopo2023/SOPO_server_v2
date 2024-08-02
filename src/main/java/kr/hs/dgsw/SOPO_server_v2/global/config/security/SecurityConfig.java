@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -25,6 +26,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
     private final JwtExceptionFilter jwtExceptionFilter;
+    private final AccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -47,15 +49,20 @@ public class SecurityConfig {
                 .requestMatchers("/re_provide/**").permitAll()
                 .requestMatchers("/file/**").hasAuthority("ROLE_ACTIVE")
                 .requestMatchers("/member/**").hasAuthority("ROLE_ACTIVE")
-                .requestMatchers("/contest/**").authenticated()
+                .requestMatchers("/contest/**").hasAuthority("ROLE_ACTIVE")
                 .requestMatchers("/like/**").hasAuthority("ROLE_ACTIVE")
+<<<<<<< HEAD
                 .requestMatchers("/enroll/**").hasAuthority("ROLE_ACTIVE")
+=======
+                .requestMatchers("/profile/**").hasAuthority("ROLE_ACTIVE")
+>>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
                 .exceptionHandling()
                 .accessDeniedHandler((req, res, e) -> jwtExceptionFilter.responseToClient(res, ErrorResponse.of(StatusEnum.INVALID_ROLE, "권한이 없습니다")))
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN));
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN))
+                .accessDeniedHandler(accessDeniedHandler);
 
         return http.build();
     }

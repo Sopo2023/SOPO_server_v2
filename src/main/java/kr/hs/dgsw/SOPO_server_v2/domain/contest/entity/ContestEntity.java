@@ -96,6 +96,7 @@ public class ContestEntity extends BaseTimeEntity { // board, contest 에 유저
         this.contestLikeCount += contestLikeCount;
     }
 
+<<<<<<< HEAD
     public void addContestPerson(int contestPerson) {
         this.contestPerson += contestPerson;
     }
@@ -104,6 +105,8 @@ public class ContestEntity extends BaseTimeEntity { // board, contest 에 유저
         this.memberIdList.add(member);
     }
 
+=======
+>>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
     public void stateUpdateActive() {
         this.contestState = ContestState.ACTIVE;
     }

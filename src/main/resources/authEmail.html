@@ -5,241 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SOPO</title>
 </head>
-<style>
-    * {
-        margin: 0;
-    }
-    span {
-        font-family: "Apple SD Gothic Neo", "\00b9d1\00c740\00ace0\00b515",
-        "Malgun Gothic", sans-serif;
-    }
-    td {
-        vertical-align: top;
-    }
-    tr {
-        display: table-row;
-        vertical-align: inherit;
-        unicode-bidi: isolate;
-        border-color: inherit;
-    }
-    div {
-        display: block;
-        unicode-bidi: isolate;
-    }
-    table {
-        display: table;
-        border-collapse: separate;
-        box-sizing: border-box;
-        text-indent: initial;
-        unicode-bidi: isolate;
-        border-spacing: 2px;
-        border-color: gray;
-    }
-.main{
-    height: 300px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-.title{
-    display: flex;
-    flex-direction: column;
-    font-family: 'Apple SD Gothic Neo',
-    '\00b9d1\00c740\00ace0\00b515', 'Malgun Gothic',
-    sans-serif;
-    justify-content: center;
-    color: #000;
-}
-.codetitle{
-    display: flex;
-}
-.code{
-    width: 100%;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-</style>
-<body style="background-color: #DCDCDC">
-<table
-        style="
-        -webkit-border-horizontal-spacing: 0px;
-        -webkit-border-vertical-spacing: 0px;
-        border-top-width: 0px;
-        border-bottom-width: 0px;
-        border-left-width: 0px;
-        border-right-width: 0px;
-        width: 100%;
-        background-color: #f7f7f7;
-      "
->
+<body style="background-color: #dcdcdc; margin: 0; padding: 0; box-sizing: border-box;">
+<table style="border-collapse: collapse; width: 100%; background-color: #f7f7f7; margin: 0 auto;">
     <tr>
-        <div style="height: 40px"></div>
-    </tr>
-    <tr>
-        <table
-                style="
-            max-width: 520px;
-            margin: 0 auto;
-            padding: 0 20px;
-            background-color: #fff;
-          "
-        >
-            <tr>
-                <td style="width: 440px; height: 30px">
-                    <div style="padding: 0 7.6923077%">
-                        <table
-                                style="
-                    border-top-width: 0px;
-                    border-bottom-width: 0px;
-                    border-left-width: 0px;
-                    border-right-width: 0px;
-                    -webkit-border-horizontal-spacing: 0px;
-                    -webkit-border-vertical-spacing: 0px;
-                    width: 100%;
-                  "
-                        >
-                            <tbody>
-                            <tr>
-                                <td style="vertical-align: top; height: 32px"></td>
-                            </tr>
-                            <tr>
-                                <td style="vertical-align: top; height: 24px">
-                                    <a
-                                            style="
-                            display: inline-block;
-                            width: 97px;
-                            height: 30px;
-                            vertical-align: top;
-                          "
-                                            href="#m_8882768039135357000_none"
-                                    >
-                                     <img src="logo-sopo%201.png" alt="error"/>
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top">
-                    <div style="padding: 0 7.6923077%">
-                        <div class="main"
-                        >
-                            <div style="height: 30px"></div>
-                            <div class="title"
-
-                            >
-                                <h1>이메일 인증번호 확인</h1>
-                            </div>
-                            <div>
-                                <div style="height: 30px"></div>
-                                <span
-                                        style="
-                        font-family: 'Apple SD Gothic Neo',
-                          '\00b9d1\00c740\00ace0\00b515', 'Malgun Gothic',
-                          sans-serif;
-                        font-size: 14px;
-                        line-height: 24px;
-                        color: #707070;
-                        word-break: keep-all;
-                      "
-                                >
-                      소포 회원가입을 위한 인증번호 입니다. 아래 인증번호를 진행
-                      중인 화면에 입력해서 이메일 인증을 완료해 주세요.</span
-                                >
-                            </div>
-                            <div class="codetitle">
-                                <div style="height: 20px"></div>
-                                <span
-                                        style="
-                        width: 100%;
-                        text-align: center;
-                        font-size: 14px;
-                        line-height: 15px;
-                        color: #111111;
-                        font-weight: bold;
-                      "
-                                >인증번호</span
-                                >
-                            </div>
-                            <div style="height: 64px">
-                                <div style="height: 20px"></div>
-                                <div
-                                        style="
-                        width: 280px;
-                        margin: 0 auto;
-                        border-radius: 4px;
-                        background-color: #f2f6fb;
-                        color: #49ae46;
-                      "
-                                >
-                                    <div
-                                    class="code"
-                                    >
-                        <span
-                                style="
-                            text-align: center;
-                            font-family: '-apple-system', BlinkMacSystemFont,
-                              'Apple SD Gothic Neo',
-                              '\00b9d1\00c740\00ace0\00b515', 'Malgun Gothic',
-                              sans-serif;
-                            font-size: 28px;
-                            line-height: 33px;
-                            font-weight: bold;
-                            letter-spacing: 5px;
-                          "
-                        ><strong>{authCode}</strong></span>
-                                    </div>
-                                </div>
-                            </div>
+        <td style="text-align: center; padding: 20px;">
+            <table style="max-width: 520px; width: 100%; background-color: #fff; padding: 20px; margin: 0 auto; border-collapse: collapse;">
+                <tr>
+                    <td style="height: 40px;"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        <a href="#m_8882768039135357000_none">
+                            <img src="data:image/png;base64,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" alt="SOPO Logo" style="border: none; display: block; margin: 0 auto;" />
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; padding: 20px;">
+                        <h1 style="font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; font-size: 24px; color: #333; margin: 0;">이메일 인증번호 확인</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0 20px;">
+                            <span style="font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; font-size: 14px; line-height: 24px; color: #707070; word-break: keep-all;">
+                                소포 회원가입을 위한 인증번호 입니다. 아래 인증번호를 진행 중인 화면에 입력해서 이메일 인증을 완료해 주세요.
+                            </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; padding: 20px; font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; font-size: 16px; color: #333;">
+                        인증번호
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 100%;text-align: center; padding: 20px;">
+                        <div style="width: 100%;  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; font-size: 24px; font-weight: bold; color: #333; border: 1px solid #e0e0e0; padding: 10px; border-radius: 5px; display: inline-block;color: #49AE46;">
+                            {authCode}
                         </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </tr>
-    <tr>
-        <table style="max-width: 520px; margin: 0 auto; ">
-            <tbody>
-            <tr>
-                <td style="width: 480px; height: 30px"></td>
-            </tr>
-            <tr>
-                <td >
-                    <div
-                            style="
-                      height: 100px;
-                      font-family: '-apple-system', BlinkMacSystemFont,
-                        'Apple SD Gothic Neo', '\00b9d1\00c740\00ace0\00b515',
-                        'Malgun Gothic', sans-serif;
-                      font-size: 11px;
-                      line-height: 18px;
-                      color: #707070;
-                      letter-spacing: 0.35px;
-                      word-break: keep-all;
-                    "
-                    >
-                    <span>
-                      본 메일은 발신전용이며, 문의에 대한 회신은 처리되지
-                      않습니다.
-                    </span>
-                        <span>
-                      소포와 관련한 궁금점이나 불편사항은
-                      <strong
-                              style="text-decoration-line: underline; cursor: pointer"
-                      ><a href="mailto: teamsopo0430@gmail.com"></a
-                      >SOPO이메일</strong
-                      >로 문의 해주시길 바랍니다
-                    </span>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height: 30px;"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; font-size: 12px; color: #707070;">
+                        <span>본 메일은 발신전용이며, 문의에 대한 회신은 처리되지 않습니다.</span><br>
+                        <span>소포와 관련한 궁금점이나 불편사항은 <a href="mailto: lerb5253@dgsw.hs.kr" style="color: #007bff; cursor: pointer; text-decoration: none;">SOPO이메일</a>로 문의 해주시길 바랍니다.</span>
+                    </td>
+                </tr>
+            </table>
+        </td>
     </tr>
 </table>
 </body>

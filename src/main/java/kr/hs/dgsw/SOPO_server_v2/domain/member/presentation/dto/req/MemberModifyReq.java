@@ -6,6 +6,7 @@ public record MemberModifyReq(
         String memberName,
         @Email
         String memberEmail,
+        String authCode,
         String memberPassword
 ) {
 }

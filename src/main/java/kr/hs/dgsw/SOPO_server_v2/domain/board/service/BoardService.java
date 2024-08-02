@@ -43,18 +43,28 @@ public class BoardService {
         BoardEntity board = BoardEntity.builder()
                 .boardTitle(null)
                 .boardContent(null)
+<<<<<<< HEAD
                 .boardLikeCount(0)
+=======
+>>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
                 .file(null)
                 .member(curMember)
                 .build();
 
+<<<<<<< HEAD
         boardRepository.save(board);
 
+=======
+>>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
         return ResponseData.of(HttpStatus.OK, "빈 게시물 생성 완료", board.getBoardId());
     }
 
     // 게시글 업데이트
+<<<<<<< HEAD
     public Response updateBoard(Long boardId, BoardUpdateReq updateReq) {
+=======
+    public Response loadBoard(Long boardId, BoardUpdateReq updateReq) {
+>>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
         MemberEntity curMember = getCurrentMember.current();
 
         BoardEntity board = boardRepository.findById(boardId)
@@ -66,7 +76,10 @@ public class BoardService {
         }
 
         board.update(updateReq);
+<<<<<<< HEAD
 
+=======
+>>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
         return Response.of(HttpStatus.OK, "게시물 업데이트 완료");
     }
 
