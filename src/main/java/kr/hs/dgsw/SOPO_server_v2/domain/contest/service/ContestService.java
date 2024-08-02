@@ -11,7 +11,6 @@ import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.contest.ContestNotFound;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.MemberNotCoincideException;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
-import kr.hs.dgsw.SOPO_server_v2.global.page.PageRequest;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class ContestService {
     private final GetCurrentMember getCurrentMember;
 
     // 대회 전체 조회
-    public ResponseData<List<ContestLoadRes>> getContests(PageRequest pageRequest) {
+    public ResponseData<List<ContestLoadRes>> getContests() {
         List<ContestEntity> contestList = contestRepository.findAll();
         List<ContestLoadRes> contestLoadRes = contestList.stream().map(
                 ContestLoadRes :: of
