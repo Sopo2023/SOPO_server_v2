@@ -11,6 +11,7 @@ import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.contest.ContestNotFound;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.MemberNotCoincideException;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
+import kr.hs.dgsw.SOPO_server_v2.global.page.PageRequest;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,11 +30,14 @@ public class ContestService {
     private final GetCurrentMember getCurrentMember;
 
     // 대회 전체 조회
-    public ResponseData<List<ContestLoadRes>> getContests() {
+    public ResponseData<List<ContestLoadRes>> getContests(PageRequest pageRequest) {
         List<ContestEntity> contestList = contestRepository.findAll();
-        List<ContestLoadRes> contestLoadRes = contestList.stream().map(
-                ContestLoadRes :: of
-        ).toList();
+
+        List<ContestLoadRes> contestLoadRes = contestList.stream()
+                .map(ContestLoadRes::of)
+                .skip((pageRequest.page() -1) * pageRequest.size())
+                .limit(pageRequest.size())
+                .collect(Collectors.toList());
 
         return ResponseData.of(HttpStatus.OK, "대회 전체 조회 완료", contestLoadRes);
     }

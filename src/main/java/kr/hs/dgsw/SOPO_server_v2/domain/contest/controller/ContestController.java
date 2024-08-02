@@ -3,6 +3,7 @@ package kr.hs.dgsw.SOPO_server_v2.domain.contest.controller;
 import kr.hs.dgsw.SOPO_server_v2.domain.contest.dto.ContestLoadRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.contest.dto.ContestUpdateReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.contest.service.ContestService;
+import kr.hs.dgsw.SOPO_server_v2.global.page.PageRequest;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class ContestController {
     private final ContestService contestService;
 
     @GetMapping("/all")
-    public ResponseData<List<ContestLoadRes>> getContests() {
-        return contestService.getContests();
+    public ResponseData<List<ContestLoadRes>> getContests(PageRequest pageRequest) {
+        return contestService.getContests(pageRequest);
     }
 
     @PostMapping
