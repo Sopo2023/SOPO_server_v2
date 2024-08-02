@@ -11,6 +11,7 @@ import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.contest.ContestNotFound;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.MemberNotCoincideException;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
+import kr.hs.dgsw.SOPO_server_v2.global.page.PageRequest;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
@@ -22,19 +23,13 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-<<<<<<< HEAD
 public class ContestService {
 
     private final ContestRepository contestRepository;
     private final GetCurrentMember getCurrentMember;
 
-=======
-public class ContestService { // 대회 전환 필요 -> ACTIVE
-    private final ContestRepository contestRepository;
-    private final GetCurrentMember getCurrentMember;
->>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
     // 대회 전체 조회
-    public ResponseData<List<ContestLoadRes>> getContests() {
+    public ResponseData<List<ContestLoadRes>> getContests(PageRequest pageRequest) {
         List<ContestEntity> contestList = contestRepository.findAll();
         List<ContestLoadRes> contestLoadRes = contestList.stream().map(
                 ContestLoadRes :: of
@@ -45,7 +40,6 @@ public class ContestService { // 대회 전환 필요 -> ACTIVE
 
     // 빈 대회 생성
     public ResponseData<Long> createContest() {
-<<<<<<< HEAD
         MemberEntity curMember = getCurrentMember.current();
 
         ContestEntity contest = ContestEntity.builder()
@@ -62,22 +56,11 @@ public class ContestService { // 대회 전환 필요 -> ACTIVE
 
         contestRepository.save(contest);
 
-=======
-
-        MemberEntity curMember = getCurrentMember.current();
-        ContestEntity contest = ContestEntity.builder()
-                .member(curMember)
-                .build();
->>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
         return ResponseData.of(HttpStatus.OK, "대회 생성 완료", contest.getContestId());
     }
 
     // 대회 업데이트
-<<<<<<< HEAD
     public Response updateContest(Long contestId, ContestUpdateReq updateReq) {
-=======
-    public Response loadContest(Long contestId, ContestUpdateReq updateReq) {
->>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
 
         MemberEntity curMember = getCurrentMember.current();
 

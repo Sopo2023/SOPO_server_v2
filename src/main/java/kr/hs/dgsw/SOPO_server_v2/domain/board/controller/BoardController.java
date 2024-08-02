@@ -3,24 +3,19 @@ package kr.hs.dgsw.SOPO_server_v2.domain.board.controller;
 import kr.hs.dgsw.SOPO_server_v2.domain.board.dto.BoardLoadRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.board.dto.BoardUpdateReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.board.service.BoardService;
+import kr.hs.dgsw.SOPO_server_v2.global.page.PageRequest;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
-<<<<<<< HEAD
 
-=======
->>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-=======
-import org.springframework.web.bind.annotation.RequestMapping;
->>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -32,8 +27,8 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/all")
-    public ResponseData<List<BoardLoadRes>> getBoards() {
-        return boardService.getBoards();
+    public ResponseData<List<BoardLoadRes>> getBoards(@ModelAttribute PageRequest pageRequest) {
+        return boardService.getBoards(pageRequest);
     }
 
     @PostMapping
@@ -42,19 +37,14 @@ public class BoardController {
     }
 
     @GetMapping
-<<<<<<< HEAD
     public ResponseData<BoardLoadRes> getBoard(@RequestParam Long boardId) {
-=======
-    public ResponseData<BoardLoadRes> getBoard(Long boardId) {
->>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
         return boardService.findOneBoard(boardId);
     }
 
     @PatchMapping
-<<<<<<< HEAD
     public Response updateBoard(
-             @RequestParam Long boardId,
-             @RequestBody BoardUpdateReq updateReq
+            @RequestParam Long boardId,
+            @RequestBody BoardUpdateReq updateReq
     ) {
         return boardService.updateBoard(boardId, updateReq);
     }
@@ -65,15 +55,3 @@ public class BoardController {
     }
 
 }
-=======
-    public Response loadBoard(Long boardId, BoardUpdateReq updateReq) {
-        return boardService.loadBoard(boardId, updateReq);
-    }
-
-    @DeleteMapping
-    public Response deleteBoard(Long boardId) {
-        return boardService.deleteBoard(boardId);
-    }
-
-}
->>>>>>> e493e579002345c8a1e3507d0ba6d7a8691fc148
