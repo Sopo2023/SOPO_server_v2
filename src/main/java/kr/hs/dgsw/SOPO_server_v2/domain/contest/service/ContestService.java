@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ContestService { // 대회 전환 필요 -> ACTIVE
+public class ContestService {
 
     private final ContestRepository contestRepository;
     private final GetCurrentMember getCurrentMember;
@@ -48,6 +48,7 @@ public class ContestService { // 대회 전환 필요 -> ACTIVE
                 .contestState(ContestState.ACTIVE)
                 .contestLikeCount(0)
                 .contestDateTime(null)
+                .memberIdList(null)
                 .file(null)
                 .member(curMember)
                 .build();

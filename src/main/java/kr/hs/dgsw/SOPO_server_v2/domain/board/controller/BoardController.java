@@ -35,7 +35,7 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseData<BoardLoadRes> getBoard(Long boardId) {
+    public ResponseData<BoardLoadRes> getBoard(@RequestParam Long boardId) {
         return boardService.findOneBoard(boardId);
     }
 
@@ -48,7 +48,7 @@ public class BoardController {
     }
 
     @DeleteMapping
-    public Response deleteBoard(Long boardId) {
+    public Response deleteBoard(@RequestParam Long boardId) {
         return boardService.deleteBoard(boardId);
     }
 

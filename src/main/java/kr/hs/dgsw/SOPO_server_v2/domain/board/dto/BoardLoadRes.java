@@ -8,7 +8,7 @@ public record BoardLoadRes (
         String boardTitle,
         String boardContent,
         Integer boardLikeCount,
-        String memberId
+        String memberName
 ){
     public static BoardLoadRes of(BoardEntity board) {
         return new BoardLoadRes(
@@ -16,7 +16,7 @@ public record BoardLoadRes (
                 board.getBoardTitle(),
                 board.getBoardTitle(),
                 board.getBoardLikeCount(),
-                board.getMember().getMemberId()
+                board.getMember().getMemberName()
         );
     }
 }

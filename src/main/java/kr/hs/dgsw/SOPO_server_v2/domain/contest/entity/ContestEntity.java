@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -31,7 +32,7 @@ import java.util.List;
 @Table(name = "tbl_contest")
 @NoArgsConstructor
 @SuperBuilder
-public class ContestEntity extends BaseTimeEntity {
+public class ContestEntity extends BaseTimeEntity { // board, contest 에 유저 이름이랑 아이디 같이 보내주기
 
     // 대회 아이디
     @Id
@@ -77,6 +78,12 @@ public class ContestEntity extends BaseTimeEntity {
     @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true) // 읽기만, 게시물 삭제될 때 함께 삭제
     private List<FileEntity> file;
 
+    // 대회 유저 이름
+    @ManyToMany
+    @JoinColumn(name = "member_id_list")
+    private List<MemberEntity> memberIdList;
+
+
     public void update(ContestUpdateReq updateReq) {
         this.contestTitle = updateReq.contestTitle();
         this.contestContent = updateReq.contestContent();
@@ -91,6 +98,10 @@ public class ContestEntity extends BaseTimeEntity {
 
     public void addContestPerson(int contestPerson) {
         this.contestPerson += contestPerson;
+    }
+
+    public void addAllowMember(MemberEntity member) {
+        this.memberIdList.add(member);
     }
 
     public void stateUpdateActive() {
