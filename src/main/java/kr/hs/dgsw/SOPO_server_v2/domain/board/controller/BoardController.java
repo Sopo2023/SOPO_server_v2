@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseData<List<BoardLoadRes>> getBoards(@ModelAttribute PageRequest pageRequest) {
         return boardService.getBoards(pageRequest);
     }
@@ -36,14 +37,14 @@ public class BoardController {
         return boardService.createBoard();
     }
 
-    @GetMapping
+    @GetMapping("/{boardId}")
     public ResponseData<BoardLoadRes> getBoard(@RequestParam Long boardId) {
         return boardService.findOneBoard(boardId);
     }
 
-    @PatchMapping
+    @PatchMapping("/{boardId}")
     public Response updateBoard(
-            @RequestParam Long boardId,
+            @PathVariable @RequestParam Long boardId,
             @RequestBody BoardUpdateReq updateReq
     ) {
         return boardService.updateBoard(boardId, updateReq);
