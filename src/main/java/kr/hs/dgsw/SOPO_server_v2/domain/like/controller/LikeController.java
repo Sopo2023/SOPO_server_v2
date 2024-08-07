@@ -5,6 +5,7 @@ import kr.hs.dgsw.SOPO_server_v2.domain.like.service.LikeService;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikeController {
     private final LikeService likeService;
 
-    @PatchMapping
-    public Response patch(@RequestParam Long id, @RequestParam LikeCategory category) {
+    @PatchMapping("{id}")
+    public Response patch(@PathVariable @RequestParam Long id, @RequestParam LikeCategory category) {
         return likeService.toggle(id, category);
     }
 
