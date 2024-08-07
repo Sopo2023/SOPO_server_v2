@@ -37,12 +37,12 @@ public class ContestController {
 
     @GetMapping("/{contestId}")
     public ResponseData<ContestLoadRes> getContest(
-            @PathVariable @RequestParam Long contestId) {
+            @PathVariable Long contestId) {
         return contestService.findOneContest(contestId);
     }
 
     @PatchMapping("/{contestId}")
-    public Response updateContest(@PathVariable @RequestParam Long contestId, @RequestBody ContestUpdateReq updateReq) {
+    public Response updateContest(@PathVariable Long contestId, @RequestBody ContestUpdateReq updateReq) {
         return contestService.updateContest(contestId, updateReq);
     }
 

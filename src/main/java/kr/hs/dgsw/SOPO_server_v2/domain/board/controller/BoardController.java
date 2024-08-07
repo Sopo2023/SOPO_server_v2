@@ -38,13 +38,13 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}")
-    public ResponseData<BoardLoadRes> getBoard(@RequestParam Long boardId) {
+    public ResponseData<BoardLoadRes> getBoard(@PathVariable Long boardId) {
         return boardService.findOneBoard(boardId);
     }
 
     @PatchMapping("/{boardId}")
     public Response updateBoard(
-            @PathVariable @RequestParam Long boardId,
+            @PathVariable Long boardId,
             @RequestBody BoardUpdateReq updateReq
     ) {
         return boardService.updateBoard(boardId, updateReq);

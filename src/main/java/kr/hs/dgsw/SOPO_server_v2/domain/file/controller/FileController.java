@@ -28,7 +28,7 @@ public class FileController {
     }
 
     @GetMapping("{id}")
-    public ResponseData<List<FileRes>> getFiles(@PathVariable @RequestParam Long id, @RequestParam FileCategory fileCategory) {
+    public ResponseData<List<FileRes>> getFiles(@PathVariable Long id, @RequestParam FileCategory fileCategory) {
         return fileService.getFiles(id, fileCategory);
     }
 }
