@@ -1,5 +1,6 @@
 package kr.hs.dgsw.SOPO_server_v2.domain.comment.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import kr.hs.dgsw.SOPO_server_v2.domain.comment.dto.CommentUpdateReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.global.common.entity.BaseTimeEntity;
 import lombok.Getter;
@@ -31,7 +33,8 @@ public class SubCommentEntity extends BaseTimeEntity {
     private Long subCommentId;
 
     // 대댓글 내용
-    private String content;
+    @Column(name = "sub_comment_content")
+    private String subCommentContent;
 
     // 부모 댓글
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,4 +46,8 @@ public class SubCommentEntity extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private MemberEntity member;
+
+    public void update(CommentUpdateReq updateReq) {
+        this.subCommentContent = updateReq.commentContent();
+    }
 }

@@ -60,6 +60,18 @@ public class EnrollService {
             return Response.of(HttpStatus.OK, "신청 취소 성공");
         }
 
+//        if (enroll.isPresent()) {
+//            enrollRepository.delete(enroll.get());
+//            return Response.of(HttpStatus.OK, "신청 취소 성공");
+//        }
+//
+//        if (contest.getContestState() == ContestState.DISABLED) {
+//            return Response.of(HttpStatus.OK, "신청이 마감되었습니다.");
+//        }
+//        else {
+//            enrollContest(curMember, contest);
+//            return Response.of(HttpStatus.OK, "신청 성공");
+//        }
     }
 
     public void enrollContest(MemberEntity member, ContestEntity contest) {
@@ -130,12 +142,12 @@ public class EnrollService {
             throw MemberNotCoincideException.EXCEPTION;
         }
 
-        // enroll 찾기
-        Optional<EnrollEntity> enroll = enrollRepository.findByMemberAndContest(member, contest);
-
         if (contest.getContestMax().equals(contest.getContestPerson())) {
             contest.stateUpdateDisabled();
         }
+
+        // enroll 찾기
+        Optional<EnrollEntity> enroll = enrollRepository.findByMemberAndContest(member, contest);
 
         // enroll 삭제
         enroll.ifPresent(enrollRepository::delete);

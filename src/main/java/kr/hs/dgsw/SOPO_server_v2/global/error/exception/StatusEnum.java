@@ -57,10 +57,13 @@ public enum StatusEnum {
     BOARD_NOT_FOUND(404, "게시물을 찾을 수 없습니다."),
 
     // contest
-    CONTEST_NOT_FOUND(404, "대회를 찾을 수 없습니다"),
+    CONTEST_NOT_FOUND(404, "대회를 찾을 수 없습니다."),
 
     // enroll
-    ENROLL_NOT_FOUND(404, "신청을 찾을 수 없습니다");
+    ENROLL_NOT_FOUND(404, "신청을 찾을 수 없습니다."),
+
+    // comment
+    COMMENT_NOT_FOUND(404, "부모 댓글을 찾을 수 없습니다.");
 
     private final int statusCode;
     private final String message;

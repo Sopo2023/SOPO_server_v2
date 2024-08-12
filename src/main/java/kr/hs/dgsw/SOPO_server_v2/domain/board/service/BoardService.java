@@ -100,5 +100,4 @@ public class BoardService {
         return Response.of(HttpStatus.OK, "게시물 삭제 완료");
     }
 
-
 }

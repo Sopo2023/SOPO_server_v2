@@ -63,7 +63,7 @@ public class LikeService {
                 return Response.of(HttpStatus.OK, "좋아요 생성 완료");
             } else {
                 contestRepository.delete(like.get().getContest());
-                contest.likeUpdate(1);
+                contest.likeUpdate(-1);
                 return Response.of(HttpStatus.OK, "좋아요 취소 완료");
             }
         }
@@ -84,7 +84,7 @@ public class LikeService {
         );
     }
 
-    public void addContestLike(MemberEntity member, ContestEntity contest) {
+    private void addContestLike(MemberEntity member, ContestEntity contest) {
         likeRepository.save(
                 LikeEntity.builder()
                         .contest(contest)
