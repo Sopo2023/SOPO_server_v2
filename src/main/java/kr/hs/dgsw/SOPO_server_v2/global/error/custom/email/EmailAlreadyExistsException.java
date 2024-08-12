@@ -7,6 +7,6 @@ public class EmailAlreadyExistsException extends BusinessException {
     public static final BusinessException EXCEPTION = new EmailAlreadyExistsException();
 
     public EmailAlreadyExistsException() {
-        super(StatusEnum.EMAIL_ALREADY_EXIST);
+        super(StatusEnum.EMAIL_ALREADY_EXISTS);
     }
 }

@@ -7,6 +7,6 @@ public class NeedAuthCode extends BusinessException {
     public static final BusinessException EXCEPTION = new NeedAuthCode();
 
     public NeedAuthCode() {
-        super(StatusEnum.NEED_AUTH_CODE);
+        super(StatusEnum.MISSING_AUTH_CODE);
     }
 }

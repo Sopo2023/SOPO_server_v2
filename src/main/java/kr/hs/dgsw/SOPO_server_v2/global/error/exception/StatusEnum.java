@@ -42,11 +42,10 @@ public enum StatusEnum {
     FILE_EXISTS(403, "파일이 이미 존재합니다."),
 
     //email
-    UNABLE_TO_SEND_EMAIL(403, "이메일을 보낼 수 없습니다."),
-    EMAIL_ALREADY_EXIST(404, "이메일이 이미 존재합니다"),
-    CODE_IS_WRONG(404, "인증코드가 옳지 않습니다."),
-    NEED_AUTH_CODE(404, "인증코드가 없습니다."),
-
+    UNABLE_TO_SEND_EMAIL(500, "이메일 전송에 실패했습니다."),
+    EMAIL_ALREADY_EXISTS(409, "이메일 주소가 이미 사용 중입니다."),
+    INVALID_AUTH_CODE(400, "유효하지 않은 인증 코드입니다."),
+    MISSING_AUTH_CODE(400, "인증 코드가 제공되지 않았습니다."),
     //fcm
     MESSAGE_SEND_FAILED(403, "메세지 전송에 실패했습니다."),
     TOKEN_NOT_PROVIDED(400, "권한이 없습니다."),

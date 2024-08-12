@@ -46,7 +46,7 @@ public class MailService {
             helper.setText(message, true);
             javaMailSender.send(mimeMessage);
         } catch (Exception e) {
-            throw new kr.hs.dgsw.SOPO_server_v2.global.error.custom.auth.UnableToSendEmailException();
+            throw new UnableToSendEmailException();
         }
         return mimeMessage;
     }
