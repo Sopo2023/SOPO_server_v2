@@ -7,6 +7,6 @@ public class CodeIsWrongException extends BusinessException {
     public static final BusinessException EXCEPTION = new CodeIsWrongException();
 
     public CodeIsWrongException() {
-        super(StatusEnum.CODE_IS_WRONG);
+        super(StatusEnum.INVALID_AUTH_CODE);
     }
 }
