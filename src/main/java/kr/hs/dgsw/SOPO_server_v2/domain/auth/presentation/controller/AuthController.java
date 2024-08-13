@@ -1,11 +1,11 @@
-package kr.hs.dgsw.SOPO_server_v2.domain.auth.controller;
+package kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.SignInReq;
-import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.SignUpReq;
-import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.res.TokenRes;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.req.SignInReq;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.req.SignUpReq;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.res.TokenRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthService;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
