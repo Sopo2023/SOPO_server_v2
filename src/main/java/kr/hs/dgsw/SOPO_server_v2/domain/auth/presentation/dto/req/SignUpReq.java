@@ -1,4 +1,4 @@
-package kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req;
+package kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.req;
 
 public record SignUpReq(
         String memberId,

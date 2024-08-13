@@ -1,8 +1,8 @@
 package kr.hs.dgsw.SOPO_server_v2.domain.auth.service;
 
-import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.SignInReq;
-import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.SignUpReq;
-import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.res.TokenRes;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.req.SignInReq;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.req.SignUpReq;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.res.TokenRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberState;

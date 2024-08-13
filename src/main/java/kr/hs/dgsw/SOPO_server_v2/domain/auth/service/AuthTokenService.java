@@ -1,7 +1,7 @@
 package kr.hs.dgsw.SOPO_server_v2.domain.auth.service;
 
-import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.req.ReProvideTokenReq;
-import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.res.ReProvideTokenRes;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.req.ReProvideTokenReq;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.res.ReProvideTokenRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.repository.MemberRepository;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.jwt.JwtProvider;

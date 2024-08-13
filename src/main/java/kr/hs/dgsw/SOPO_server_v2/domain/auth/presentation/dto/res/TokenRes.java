@@ -1,4 +1,4 @@
-package kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.res;
+package kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.res;
 
 import lombok.Builder;
 

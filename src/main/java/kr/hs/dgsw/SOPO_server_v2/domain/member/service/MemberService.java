@@ -19,6 +19,7 @@ public class MemberService {
     public Response deleteMember(){
         MemberEntity member = getCurrentMember.current();
         member.setMemberState(MemberState.DELETED);
+        memberRepository.save(member);
         return Response.of(HttpStatus.OK, "성공");
     }
 }

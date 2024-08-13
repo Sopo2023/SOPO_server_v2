@@ -1,6 +1,6 @@
 package kr.hs.dgsw.SOPO_server_v2.global.infra.security;
 
-import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.res.TokenRes;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.res.TokenRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.repository.MemberRepository;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.jwt.JwtProvider;

@@ -3,7 +3,7 @@ package kr.hs.dgsw.SOPO_server_v2.global.infra.jwt;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import kr.hs.dgsw.SOPO_server_v2.domain.auth.dto.res.TokenRes;
+import kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.dto.res.TokenRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberState;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.repository.MemberRepository;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.auth.WithdrawalMemberException;

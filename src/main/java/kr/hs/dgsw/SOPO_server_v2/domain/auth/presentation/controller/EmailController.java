@@ -1,4 +1,4 @@
-package kr.hs.dgsw.SOPO_server_v2.domain.auth.controller;
+package kr.hs.dgsw.SOPO_server_v2.domain.auth.presentation.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthEmailService;
