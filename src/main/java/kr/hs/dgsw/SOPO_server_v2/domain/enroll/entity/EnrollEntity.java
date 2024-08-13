@@ -1,6 +1,7 @@
 package kr.hs.dgsw.SOPO_server_v2.domain.enroll.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +27,7 @@ public class EnrollEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long EnrollIdx;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "fk_member_id")
     private MemberEntity member;
 
