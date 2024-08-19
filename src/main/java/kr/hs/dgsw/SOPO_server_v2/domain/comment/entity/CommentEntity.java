@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import kr.hs.dgsw.SOPO_server_v2.domain.board.entity.BoardEntity;
+import kr.hs.dgsw.SOPO_server_v2.domain.comment.dto.CommentUpdateReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.global.common.entity.BaseTimeEntity;
 import lombok.Getter;
@@ -59,5 +60,11 @@ public class CommentEntity extends BaseTimeEntity { // 부모
     @OnDelete(action = OnDeleteAction.CASCADE)
     private MemberEntity member;
 
+    public void addChildrenComment(SubCommentEntity comment) {
+        this.children.add(comment);
+    }
 
+    public void update(CommentUpdateReq updateReq) {
+        this.commentContent = updateReq.commentContent();
+    }
 }

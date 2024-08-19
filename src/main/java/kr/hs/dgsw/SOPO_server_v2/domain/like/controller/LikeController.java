@@ -17,7 +17,7 @@ public class LikeController {
     private final LikeService likeService;
 
     @PatchMapping("{id}")
-    public Response patch(@PathVariable @RequestParam Long id, @RequestParam LikeCategory category) {
+    public Response patch(@PathVariable Long id, @RequestParam LikeCategory category) {
         return likeService.toggle(id, category);
     }
 
