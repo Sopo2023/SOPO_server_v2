@@ -1,6 +1,7 @@
 package kr.hs.dgsw.SOPO_server_v2.domain.contest.service;
 
 import jakarta.transaction.Transactional;
+import kr.hs.dgsw.SOPO_server_v2.domain.board.dto.BoardLoadRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.contest.dto.ContestLoadRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.contest.dto.ContestUpdateReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.contest.entity.ContestEntity;
@@ -11,15 +12,15 @@ import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.contest.ContestNotFound;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.MemberNotCoincideException;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
-import kr.hs.dgsw.SOPO_server_v2.global.page.PageRequest;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,16 +31,11 @@ public class ContestService {
     private final GetCurrentMember getCurrentMember;
 
     // 대회 전체 조회
-    public ResponseData<List<ContestLoadRes>> getContests(PageRequest pageRequest) {
-        List<ContestEntity> contestList = contestRepository.findAll();
+    public ResponseData<List<ContestLoadRes>> getContests(int size, int page) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<ContestEntity> contestList = contestRepository.findAll(pageable).getContent();
 
-        List<ContestLoadRes> contestLoadRes = contestList.stream()
-                .map(ContestLoadRes::of)
-                .skip((pageRequest.page() -1) * pageRequest.size())
-                .limit(pageRequest.size())
-                .collect(Collectors.toList());
-
-        return ResponseData.of(HttpStatus.OK, "대회 전체 조회 완료", contestLoadRes);
+        return ResponseData.of(HttpStatus.OK, "대회 전체 조회 완료", contestList.stream().map(ContestLoadRes::of).toList());
     }
 
     // 빈 대회 생성
@@ -71,10 +67,7 @@ public class ContestService {
         ContestEntity contest = contestRepository.findById(contestId)
                 .orElseThrow(() -> ContestNotFound.EXCEPTION);
 
-        // 만약 현재 로그인 유저와 Load 하려는 유저가 다르다면
-        if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw MemberNotCoincideException.EXCEPTION;
-        }
+        checkMemberAuthority(curMember, contest);
 
         contest.update(updateReq);
 
@@ -100,11 +93,9 @@ public class ContestService {
         ContestEntity contest = contestRepository.findById(contestId)
                 .orElseThrow(() -> ContestNotFound.EXCEPTION);
 
-        if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw MemberNotCoincideException.EXCEPTION;
-        }
+        checkMemberAuthority(curMember, contest);
 
-        contestRepository.deleteById(contestId);
+        contestRepository.delete(contest);
         return Response.of(HttpStatus.OK, "대회 삭제 완료");
     }
 
@@ -116,9 +107,7 @@ public class ContestService {
         ContestEntity contest = contestRepository.findById(contestId)
                 .orElseThrow(() -> ContestNotFound.EXCEPTION);
 
-        if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw MemberNotCoincideException.EXCEPTION;
-        }
+        checkMemberAuthority(curMember, contest);
 
         if (contest.getContestState() == ContestState.ACTIVE) {
             contest.stateUpdateDisabled();
@@ -129,4 +118,9 @@ public class ContestService {
         return Response.of(HttpStatus.OK, "대회 상태 변경 성공!");
     }
 
+    private void checkMemberAuthority(MemberEntity curMember, ContestEntity contest) {
+        if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
+            throw MemberNotCoincideException.EXCEPTION;
+        }
+    }
 }

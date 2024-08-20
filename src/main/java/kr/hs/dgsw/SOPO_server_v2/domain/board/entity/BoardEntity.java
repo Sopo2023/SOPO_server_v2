@@ -3,6 +3,7 @@ package kr.hs.dgsw.SOPO_server_v2.domain.board.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import kr.hs.dgsw.SOPO_server_v2.domain.board.dto.BoardUpdateReq;
+import kr.hs.dgsw.SOPO_server_v2.domain.comment.entity.CommentEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.entity.FileEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.global.common.entity.BaseTimeEntity;
@@ -22,8 +24,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.List;
 
 @Getter
-@Entity
-@Table(name = "tbl_board")
+@Entity(name = "tbl_board")
 @NoArgsConstructor
 @Setter
 @SuperBuilder
@@ -32,29 +33,27 @@ public class BoardEntity extends BaseTimeEntity {
     // 게시물 아이디
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
     private Long boardId;
 
     // 게시물 제목
-    @Column(name = "board_title")
     private String boardTitle;
 
     // 게시물 내용
-    @Column(name = "board_content")
     private String boardContent;
 
     // 게시물 좋아요
-    @Column(name = "board_like_count")
     private Integer boardLikeCount = 0;
 
     // 유저 아이디
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id") // member_id로 참조한다.
     private MemberEntity member;
 
     // 게시물 파일
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true) // 읽기만, 게시물 삭제될 때 함께 삭제
     private List<FileEntity> file;
+
+    private Integer boardCommentCount = 0;
 
     public void update(BoardUpdateReq updateReq) {
         this.boardTitle = updateReq.boardTitle();
@@ -64,4 +63,9 @@ public class BoardEntity extends BaseTimeEntity {
     public void likeUpdate(int boardLikeCount) {
         this.boardLikeCount += boardLikeCount;
     }
+
+    public void updateCommentCnt(Integer num){
+        this.boardCommentCount += num;
+    }
+
 }

@@ -38,16 +38,16 @@ public class CommentEntity extends BaseTimeEntity { // 부모
     // 댓글 아이디
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
     private Long commentId;
 
     // 댓글 내용
-    @Column(name = "comment_content")
     private String commentContent;
 
+    private Long parentId;
+
     // 자식 댓글
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SubCommentEntity> children = new ArrayList<>();
+//    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<SubCommentEntity> children = new ArrayList<>();
 
     // 게시물 아이디
     @ManyToOne(fetch = FetchType.LAZY)
@@ -60,11 +60,7 @@ public class CommentEntity extends BaseTimeEntity { // 부모
     @OnDelete(action = OnDeleteAction.CASCADE)
     private MemberEntity member;
 
-    public void addChildrenComment(SubCommentEntity comment) {
-        this.children.add(comment);
-    }
-
-    public void update(CommentUpdateReq updateReq) {
-        this.commentContent = updateReq.commentContent();
+    public void update(String commentContent) {
+        this.commentContent = commentContent;
     }
 }

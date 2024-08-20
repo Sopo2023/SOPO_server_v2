@@ -29,7 +29,7 @@ public class BoardController {
 
     @GetMapping
     public ResponseData<List<BoardLoadRes>> getBoards(@ModelAttribute PageRequest pageRequest) {
-        return boardService.getBoards(pageRequest);
+        return boardService.getBoards(pageRequest.size().intValue(),pageRequest.page().intValue()+1);
     }
 
     @PostMapping

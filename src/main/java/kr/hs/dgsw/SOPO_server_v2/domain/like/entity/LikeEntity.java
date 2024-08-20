@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,7 +30,7 @@ public class LikeEntity {
     private Long likeIdx;
 
     // 유저 idx
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_member_id")
     private MemberEntity member; // param으로 좋아요 타입 받기
 
@@ -38,12 +39,12 @@ public class LikeEntity {
     private LikeCategory likeCategory;
 
     // 게시물 idx
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_board_id")
     private BoardEntity board;
 
     // 대회 idx
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_contest_id")
     private ContestEntity contest;
 

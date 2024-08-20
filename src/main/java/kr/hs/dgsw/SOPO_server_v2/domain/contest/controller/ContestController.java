@@ -9,6 +9,7 @@ import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +27,8 @@ public class ContestController {
     private final ContestService contestService;
 
     @GetMapping()
-    public ResponseData<List<ContestLoadRes>> getContests(PageRequest pageRequest) {
-        return contestService.getContests(pageRequest);
+    public ResponseData<List<ContestLoadRes>> getContests(@ModelAttribute PageRequest pageRequest) {
+        return contestService.getContests(pageRequest.size().intValue(),pageRequest.page().intValue()+1);
     }
 
     @PostMapping

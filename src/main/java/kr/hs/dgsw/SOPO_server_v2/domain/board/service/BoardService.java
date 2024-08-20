@@ -10,15 +10,15 @@ import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.board.BoardNotFound;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.member.MemberNotCoincideException;
 import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
-import kr.hs.dgsw.SOPO_server_v2.global.page.PageRequest;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,16 +29,10 @@ public class BoardService {
     private final GetCurrentMember getCurrentMember;
 
     // 게시글 전체 조회
-    public ResponseData<List<BoardLoadRes>> getBoards(PageRequest pageRequest) {
-        List<BoardEntity> boardList = boardRepository.findAll();
-
-        List<BoardLoadRes> boardLoadResList = boardList.stream()
-                .map(BoardLoadRes::of)
-                .skip((pageRequest.page() -1) * pageRequest.size())
-                .limit(pageRequest.size())
-                .collect(Collectors.toList());
-
-        return ResponseData.of(HttpStatus.OK, "게시물 전체 조회 완료", boardLoadResList);
+    public ResponseData<List<BoardLoadRes>> getBoards(int size, int page) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<BoardEntity> boardList = boardRepository.findAll(pageable).getContent();
+        return ResponseData.of(HttpStatus.OK, "게시물 전체 조회 완료", boardList.stream().map(BoardLoadRes::of).toList());
     }
 
     // 빈 게시글 생성
@@ -49,6 +43,7 @@ public class BoardService {
                 .boardTitle(null)
                 .boardContent(null)
                 .boardLikeCount(0)
+                .boardCommentCount(0)
                 .file(null)
                 .member(curMember)
                 .build();
@@ -65,10 +60,7 @@ public class BoardService {
         BoardEntity board = boardRepository.findById(boardId)
                 .orElseThrow(() -> BoardNotFound.EXCEPTION);
 
-        // 만약 현재 로그인 유저와 Load 하려는 유저가 다르고, admin 아니라면
-        if (!board.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw MemberNotCoincideException.EXCEPTION;
-        }
+        checkMemberAuthority(curMember, board);
 
         board.update(updateReq);
 
@@ -79,7 +71,9 @@ public class BoardService {
     public ResponseData<BoardLoadRes> findOneBoard(Long boardId) {
         BoardEntity board = boardRepository.findById(boardId)
                 .orElseThrow(() -> BoardNotFound.EXCEPTION);
+
         BoardLoadRes boardLoadRes = BoardLoadRes.of(board);
+
         return ResponseData.of(HttpStatus.OK, "게시물 단일 조회 완료", boardLoadRes);
     }
 
@@ -91,13 +85,15 @@ public class BoardService {
         BoardEntity board = boardRepository.findById(boardId)
                 .orElseThrow(() -> BoardNotFound.EXCEPTION);
 
-        // 만약 만든 사람과 삭제하려는 사람이 일치하지 않고 admin 아니라면.. error
-        if (!board.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw MemberNotCoincideException.EXCEPTION;
-        }
+        checkMemberAuthority(curMember, board);
 
-        boardRepository.deleteById(boardId);
+        boardRepository.delete(board);
         return Response.of(HttpStatus.OK, "게시물 삭제 완료");
     }
 
+    private void checkMemberAuthority(MemberEntity curMember, BoardEntity board) {
+        if (!board.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
+            throw MemberNotCoincideException.EXCEPTION;
+        }
+    }
 }

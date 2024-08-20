@@ -43,35 +43,35 @@ public class EnrollService {
 
         Optional<EnrollEntity> enroll = enrollRepository.findByMemberAndContest(curMember, contest);
 
-        if (enroll.isEmpty()) {
-            enrollContest(curMember, contest);
+//        if (enroll.isEmpty()) {
+//            enrollContest(curMember, contest);
+//
+//            if (contest.getContestState() == ContestState.DISABLED) {
+//                return Response.of(HttpStatus.OK, "신청이 마감되었습니다.");
+//            }
+//            else {
+//                // enroll 찾기
+//                return Response.of(HttpStatus.OK, "신청 성공");
+//            }
+//        }
+//        else {
+//            enrollRepository.delete(enroll.get());
+//
+//            return Response.of(HttpStatus.OK, "신청 취소 성공");
+//        }
 
-            if (contest.getContestState() == ContestState.DISABLED) {
-                return Response.of(HttpStatus.OK, "신청이 마감되었습니다.");
-            }
-            else {
-                // enroll 찾기
-                return Response.of(HttpStatus.OK, "신청 성공");
-            }
-        }
-        else {
+        if (enroll.isPresent()) {
             enrollRepository.delete(enroll.get());
-
             return Response.of(HttpStatus.OK, "신청 취소 성공");
         }
 
-//        if (enroll.isPresent()) {
-//            enrollRepository.delete(enroll.get());
-//            return Response.of(HttpStatus.OK, "신청 취소 성공");
-//        }
-//
-//        if (contest.getContestState() == ContestState.DISABLED) {
-//            return Response.of(HttpStatus.OK, "신청이 마감되었습니다.");
-//        }
-//        else {
-//            enrollContest(curMember, contest);
-//            return Response.of(HttpStatus.OK, "신청 성공");
-//        }
+        if (contest.getContestState() == ContestState.DISABLED) {
+            return Response.of(HttpStatus.OK, "신청이 마감되었습니다.");
+        }
+        else {
+            enrollContest(curMember, contest);
+            return Response.of(HttpStatus.OK, "신청 성공");
+        }
     }
 
     public void enrollContest(MemberEntity member, ContestEntity contest) {
@@ -99,15 +99,10 @@ public class EnrollService {
             return Response.of(HttpStatus.OK, "허락할 수 없습니다.");
         }
 
-        if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw MemberNotCoincideException.EXCEPTION;
-        }
-
+        checkMemberAuthority(curMember, contest);
 
         // enroll 찾기
         Optional<EnrollEntity> enroll = enrollRepository.findByMemberAndContest(member, contest);
-
-        System.out.println(enroll);
 
         // enroll 삭제
         enroll.ifPresent(enrollRepository::delete);
@@ -138,9 +133,7 @@ public class EnrollService {
 
         MemberEntity member = memberRepository.findByMemberId(memberId);
 
-        if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw MemberNotCoincideException.EXCEPTION;
-        }
+        checkMemberAuthority(curMember, contest);
 
         if (contest.getContestMax().equals(contest.getContestPerson())) {
             contest.stateUpdateDisabled();
@@ -169,11 +162,15 @@ public class EnrollService {
             memberNameList.add(enroll.getMember().getMemberName());
         }
 
-        if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
-            throw MemberNotCoincideException.EXCEPTION;
-        }
+        checkMemberAuthority(curMember, contest);
 
         return ResponseData.of(HttpStatus.OK, "신청한 사람 조회 성공", memberNameList);
     }
 
+    private void checkMemberAuthority(MemberEntity curMember, ContestEntity contest) {
+        if (!contest.getMember().getMemberId().equals(curMember.getMemberId()) && curMember.getMemberCategory() == MemberCategory.USER) {
+            throw MemberNotCoincideException.EXCEPTION;
+        }
+    }
 }
+
