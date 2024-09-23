@@ -5,6 +5,8 @@ import kr.hs.dgsw.SOPO_server_v2.domain.board.dto.BoardLoadRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.board.dto.BoardUpdateReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.board.entity.BoardEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.board.repository.BoardRepository;
+import kr.hs.dgsw.SOPO_server_v2.domain.file.enums.FileCategory;
+import kr.hs.dgsw.SOPO_server_v2.domain.file.repository.FileRepository;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.enums.MemberCategory;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.board.BoardNotFound;
@@ -27,13 +29,15 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final GetCurrentMember getCurrentMember;
+    private final FileRepository fileRepository;
 
     // 게시글 전체 조회
     public ResponseData<List<BoardLoadRes>> getBoards(PageRequest pageRequest) {
         List<BoardEntity> boardList = boardRepository.findAll();
 
         List<BoardLoadRes> boardLoadResList = boardList.stream()
-                .map(BoardLoadRes::of)
+                .map(b -> BoardLoadRes.of(b, fileRepository.findByFileCategoryAndFkId(
+                        FileCategory.BOARD, b.getBoardId().toString())))
                 .skip((pageRequest.page() -1) * pageRequest.size())
                 .limit(pageRequest.size())
                 .collect(Collectors.toList());
@@ -49,7 +53,6 @@ public class BoardService {
                 .boardTitle(null)
                 .boardContent(null)
                 .boardLikeCount(0)
-                .file(null)
                 .member(curMember)
                 .build();
 
@@ -79,7 +82,7 @@ public class BoardService {
     public ResponseData<BoardLoadRes> findOneBoard(Long boardId) {
         BoardEntity board = boardRepository.findById(boardId)
                 .orElseThrow(() -> BoardNotFound.EXCEPTION);
-        BoardLoadRes boardLoadRes = BoardLoadRes.of(board);
+        BoardLoadRes boardLoadRes = BoardLoadRes.of(board, fileRepository.findByFileCategoryAndFkId(FileCategory.BOARD, boardId.toString()));
         return ResponseData.of(HttpStatus.OK, "게시물 단일 조회 완료", boardLoadRes);
     }
 

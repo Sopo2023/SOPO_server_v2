@@ -54,7 +54,6 @@ public class ContestService {
                 .contestLikeCount(0)
                 .contestDateTime(null)
                 .memberIdList(null)
-                .file(null)
                 .member(curMember)
                 .build();
 

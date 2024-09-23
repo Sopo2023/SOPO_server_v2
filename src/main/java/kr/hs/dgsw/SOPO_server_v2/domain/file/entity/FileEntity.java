@@ -59,4 +59,5 @@ public class FileEntity extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private MemberEntity member;
 
+    private String fkId;
 }
