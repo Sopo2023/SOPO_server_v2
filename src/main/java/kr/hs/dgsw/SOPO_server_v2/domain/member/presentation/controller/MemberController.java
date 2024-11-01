@@ -23,4 +23,6 @@ public class MemberController {
     public Response deleteMember(){
         return memberService.deleteMember();
     }
+
+
 }

@@ -1,8 +1,5 @@
 package kr.hs.dgsw.SOPO_server_v2.domain.file.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import kr.hs.dgsw.SOPO_server_v2.domain.board.entity.BoardEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.board.repository.BoardRepository;
 import kr.hs.dgsw.SOPO_server_v2.domain.contest.entity.ContestEntity;
@@ -11,119 +8,78 @@ import kr.hs.dgsw.SOPO_server_v2.domain.file.dto.FileRes;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.entity.FileEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.enums.FileCategory;
 import kr.hs.dgsw.SOPO_server_v2.domain.file.repository.FileRepository;
+import kr.hs.dgsw.SOPO_server_v2.global.common.aws.S3Service;
+import kr.hs.dgsw.SOPO_server_v2.global.common.aws.dto.S3Res;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.board.BoardNotFound;
 import kr.hs.dgsw.SOPO_server_v2.global.error.custom.contest.ContestNotFound;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class FileService {
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
-
-    private final AmazonS3 amazonS3;
-
+    private final S3Service s3Service;
     private final FileRepository fileRepository;
-
     private final BoardRepository boardRepository;
-
     private final ContestRepository contestRepository;
 
     @Transactional
     public ResponseData<List<FileRes>> fileUpload(Long id, FileCategory fileCategory, List<MultipartFile> fileList) {
 
-        List<FileRes> fileLists = new ArrayList<>();
+        List<FileRes> fileRes = new ArrayList<>();
+        for (MultipartFile file : fileList) {
+            S3Res s3Res = s3Service.upload(file, fileCategory.toString());
+            FileEntity fileEntity = createFileEntity(file, s3Res.url(), fileCategory);
 
-        try {
-
-            for (MultipartFile file : fileList) {
-                String fileName = file.getOriginalFilename();
-
-                ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentType(file.getContentType());
-                metadata.setContentLength(file.getSize());
-
-                // S3에 저장하는 코드
-                amazonS3.putObject(
-                        new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata)
-                );
-
-                // FileRes 형식으로 만들기
-                FileRes oneFile = FileRes.builder()
-                        .fileName(fileName)
-                        .fileUrl(amazonS3.getUrl(bucket, fileName).toString())
-                        .build();
-
-                fileLists.add(oneFile);
-
-                // 파일 업데이트 하는 코드
-                if (fileCategory == FileCategory.BOARD) {
-
-                    BoardEntity board = boardRepository.findById(id)
-                            .orElseThrow(() -> BoardNotFound.EXCEPTION);
-
-                    // DB에 저장하는 코드
-                    FileEntity fileEntity = FileEntity.builder()
-                            .fileName(fileName)
-                            .fileCategory(fileCategory)
-                            .fileUrl(amazonS3.getUrl(bucket, fileName).toString())
-                            .board(board)
-                            .build();
-                    fileRepository.save(fileEntity);
-
-                    // 현재 게시물의 파일 목록에 새로 업로드된 파일 추가
-                    List<FileEntity> files = board.getFile();
-                    if (files == null) {
-                        files = new ArrayList<>();
-                    }
-                    files.add(fileEntity);
-                    board.setFile(files); // BoardEntity의 파일 목록 직접 수정
-
-                    // 게시물 엔티티를 DB에 저장하여 파일 목록 반영
-                    boardRepository.save(board);
-
-                } else if (fileCategory == FileCategory.CONTEST) {
-                    ContestEntity contest = contestRepository.findById(id)
-                            .orElseThrow(() -> ContestNotFound.EXCEPTION);
-
-                    // DB에 저장하는 코드
-                    FileEntity fileEntity = FileEntity.builder()
-                            .fileName(fileName)
-                            .fileCategory(fileCategory)
-                            .fileUrl(amazonS3.getUrl(bucket, fileName).toString())
-                            .contest(contest)
-                            .build();
-
-                    fileRepository.save(fileEntity);
-
-                    // 현재 게시물의 파일 목록에 새로 업로드된 파일 추가
-                    List<FileEntity> files = contest.getFile();
-                    if (files == null) {
-                        files = new ArrayList<>();
-                    }
-                    files.add(fileEntity);
-                    contest.setFile(files); // BoardEntity의 파일 목록 직접 수정
-
-                    // 게시물 엔티티를 DB에 저장하여 파일 목록 반영
-                    contestRepository.save(contest);
-                }
+            if (fileCategory == FileCategory.BOARD) {
+                BoardEntity board = boardRepository.findById(id)
+                        .orElseThrow(() -> BoardNotFound.EXCEPTION);
+                saveFileEntity(fileEntity, board.getFile(), board, boardRepository::save);
+            } else if (fileCategory == FileCategory.CONTEST) {
+                ContestEntity contest = contestRepository.findById(id)
+                        .orElseThrow(() -> ContestNotFound.EXCEPTION);
+                saveFileEntity(fileEntity, contest.getFile(), contest, contestRepository::save);
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Error uploading file to S3", e);
+            fileRes.add(FileRes.of(fileEntity));
         }
-        return ResponseData.of(HttpStatus.OK, "파일 업로드 완료", fileLists);
+
+        return ResponseData.of(HttpStatus.OK, "파일 업로드 완료", fileRes);
+    }
+
+    private FileEntity createFileEntity(MultipartFile file, String url, FileCategory fileCategory) {
+        return FileEntity.builder()
+                .fileName(file.getOriginalFilename())
+                .fileCategory(fileCategory)
+                .fileUrl(url)
+                .build();
+    }
+
+    private <T> void saveFileEntity(FileEntity fileEntity, List<FileEntity> files, T entity, Consumer<T> saveFunction) {
+        if (files == null) {
+            files = new ArrayList<>();
+        }
+        files.add(fileEntity);
+
+        if (entity instanceof BoardEntity) {
+            fileEntity.setBoard((BoardEntity) entity);
+            ((BoardEntity) entity).setFile(files);
+        } else if (entity instanceof ContestEntity) {
+            fileEntity.setContest((ContestEntity) entity);
+            ((ContestEntity) entity).setFile(files);
+        }
+
+        fileRepository.save(fileEntity);
+        saveFunction.accept(entity);
     }
 
     public ResponseData<List<FileRes>> getFiles(Long id, FileCategory fileCategory) {
@@ -132,19 +88,13 @@ public class FileService {
 
         if (fileCategory == FileCategory.BOARD) {
 
-            fileList = fileRepository.findByBoard_BoardId(id).stream()
-                    .map(file -> FileRes.builder()
-                            .fileName(file.getFileName())
-                            .fileUrl(file.getFileUrl())
-                            .build())
+            fileList = fileRepository.findByBoardBoardId(id).stream()
+                    .map(FileRes::of)
                     .collect(Collectors.toList());
 
         } else if (fileCategory == FileCategory.CONTEST) {
-            fileList = fileRepository.findByContest_ContestId(id).stream()
-                    .map(file -> FileRes.builder()
-                            .fileName(file.getFileName())
-                            .fileUrl(file.getFileUrl())
-                            .build())
+            fileList = fileRepository.findByContestContestId(id).stream()
+                    .map(FileRes::of)
                     .collect(Collectors.toList());
         }
 

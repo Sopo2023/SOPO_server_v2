@@ -1,6 +1,6 @@
 package kr.hs.dgsw.SOPO_server_v2.domain.member.service;
 
-import kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthEmailService;
+import  kr.hs.dgsw.SOPO_server_v2.domain.auth.service.AuthEmailService;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.entity.MemberEntity;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.presentation.dto.req.MemberModifyReq;
 import kr.hs.dgsw.SOPO_server_v2.domain.member.presentation.dto.res.ReadProfileRes;
@@ -11,6 +11,7 @@ import kr.hs.dgsw.SOPO_server_v2.global.infra.security.GetCurrentMember;
 import kr.hs.dgsw.SOPO_server_v2.global.response.Response;
 import kr.hs.dgsw.SOPO_server_v2.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -30,8 +31,8 @@ public class MemberProfileService {
         String memberEmail = memberModifyReq.memberEmail();
         String authCode = memberModifyReq.authCode();
 
-        if (memberEmail != null && !memberEmail.isEmpty()) {
-            if (authCode == null || authCode.isEmpty()) {
+        if (StringUtils.isNotBlank(memberEmail)) {
+            if (StringUtils.isBlank(authCode)) {
                 throw NeedAuthCode.EXCEPTION;
             }
             if (!authEmailService.verifiedCode(memberEmail, authCode)) {
@@ -41,13 +42,18 @@ public class MemberProfileService {
         }
 
         String memberPassword = memberModifyReq.memberPassword();
-        if (memberPassword != null) {
+        if (StringUtils.isNotBlank(memberPassword)) {
             member.setMemberPassword(new BCryptPasswordEncoder().encode(memberPassword));
         }
 
         String memberName = memberModifyReq.memberName();
-        if (memberName != null) {
+        if (StringUtils.isNotBlank(memberName)) {
             member.setMemberName(memberName);
+        }
+
+        String memberSchool = memberModifyReq.memberSchool();
+        if (StringUtils.isNotBlank(memberSchool)) {
+            member.setMemberSchool(memberSchool);
         }
 
         memberRepository.save(member);

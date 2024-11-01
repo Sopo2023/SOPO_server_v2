@@ -19,7 +19,7 @@ public class MemberProfileController {
     private final MemberProfileService memberProfileService;
 
     @Operation(description = "멤버 프로필 수정")
-    @PatchMapping("")
+    @PatchMapping
     public Response modifyMember(
             @RequestBody MemberModifyReq memberModifyReq) {
         return memberProfileService.memberModify(memberModifyReq);
@@ -30,5 +30,7 @@ public class MemberProfileController {
     public ResponseData<ReadProfileRes> readProfile(){
         return memberProfileService.readProfile();
     }
+
+
 }
 

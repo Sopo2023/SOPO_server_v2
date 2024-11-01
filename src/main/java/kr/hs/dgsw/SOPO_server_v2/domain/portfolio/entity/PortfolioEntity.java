@@ -26,7 +26,6 @@ public class PortfolioEntity extends BaseTimeEntity {
     @Column(name = "portfolio_id")
     private Long portfolioId;
 
-
     @Column(name = "portfolio_title")
     private String portfolioTitle;
 

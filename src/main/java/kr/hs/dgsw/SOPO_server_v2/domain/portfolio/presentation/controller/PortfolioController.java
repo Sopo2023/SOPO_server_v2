@@ -18,6 +18,12 @@ import java.util.List;
 public class PortfolioController {
     private final PortfolioService portfolioService;
 
+    public ResponseData<Long> generatePortfolio() {
+        return portfolioService.generatePortfolio();
+    }
+
+
+
     @Operation(description = "최신 포트폴리오 불러오기")
     @GetMapping
     public ResponseData<List<LoadPortfolioRes>> loadPortfolio(
@@ -25,4 +31,6 @@ public class PortfolioController {
             ){
         return portfolioService.pagingPortfolio(pageRequest);
     }
+
+
 }

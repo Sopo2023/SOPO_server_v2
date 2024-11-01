@@ -23,12 +23,12 @@ public class FileController {
     private final FileService fileService;
 
     @PostMapping
-    public ResponseData<List<FileRes>> fileUpload(@RequestParam Long id, @RequestParam FileCategory fileCategory, @RequestPart List<MultipartFile> fileList) {
-        return fileService.fileUpload(id, fileCategory, fileList);
+    public ResponseData<List<FileRes>> fileUpload(@RequestParam Long id, @RequestParam FileCategory file_category, @RequestPart List<MultipartFile> file_list) {
+        return fileService.fileUpload(id, file_category, file_list);
     }
 
     @GetMapping("{id}")
-    public ResponseData<List<FileRes>> getFiles(@PathVariable Long id, @RequestParam FileCategory fileCategory) {
-        return fileService.getFiles(id, fileCategory);
+    public ResponseData<List<FileRes>> getFiles(@PathVariable Long id, @RequestParam FileCategory file_category) {
+        return fileService.getFiles(id, file_category);
     }
 }
