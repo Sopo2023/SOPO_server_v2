@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FileRepository extends JpaRepository<FileEntity, Long> {
-    List<FileEntity> findByBoard_BoardId(Long boardId);
-    List<FileEntity> findByContest_ContestId(Long contestId);
+    List<FileEntity> findByBoardBoardId(Long boardId);
+    List<FileEntity> findByContestContestId(Long contestId);
 }
